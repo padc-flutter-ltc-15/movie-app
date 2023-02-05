@@ -1,0 +1,12 @@
+
+import 'dart:ui';
+
+const PRIMARY_COLOR = Color.fromRGBO(22, 27, 36, 1.0);
+const HOME_SCREEN_BG_COLOR = Color.fromRGBO(21, 27, 35, 1.0);
+
+const PLAY_BUTTON_COLOR = Color.fromRGBO(233, 189, 68, 1.0);
+const HOME_SCREEN_LIST_TITLE_COLOR = Color.fromRGBO(70, 77, 91, 1.0);
+const HOME_SCREEN_BANNER_DOT_ACTIVE_COLOR = Color.fromRGBO(233, 189, 68, 1.0);
+const HOME_SCREEN_BANNER_DOT_INACTIVE_COLOR = Color.fromRGBO(255, 255, 255, 1.0);
+const DETAIL_SCREEN_CHIP_BG_COLOR = Color.fromRGBO(36, 42, 49, 1.0);
+const DETAIL_SCREEN_INFO_TEXT_COLOR = Color.fromRGBO(58, 62, 71, 1.0);
