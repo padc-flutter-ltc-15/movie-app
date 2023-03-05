@@ -39,6 +39,7 @@ class GenreSection extends StatelessWidget {
         ),
         HorizontalMovieListView(
           onTapMovie: onTabMovie,
+          movieList: [],
         ), /// Movie List
       ],
     );

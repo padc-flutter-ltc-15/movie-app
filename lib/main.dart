@@ -6,7 +6,7 @@ import 'package:themovieapp/screens/detail_screen.dart';
 import 'package:themovieapp/screens/home_screen.dart';
 
 void main() {
-  RetrofitMovieDataAgentImpl().getNowPlayingMovies(1);
+  //RetrofitMovieDataAgentImpl().getNowPlayingMovies(1);
   runApp(const MyApp());
 }
 

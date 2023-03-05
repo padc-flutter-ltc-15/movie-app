@@ -1,7 +1,9 @@
 
 import 'package:flutter/material.dart';
+import 'package:themovieapp/network/api_constants.dart';
 import 'package:themovieapp/widgets/rating_view.dart';
 
+import '../data/vos/movie_vo.dart';
 import '../resources/dimens.dart';
 import '../resources/strings.dart';
 import '../widgets/title_text.dart';
@@ -9,9 +11,10 @@ import '../widgets/title_text.dart';
 class BestPopularMoviesAndSeriesSection extends StatelessWidget {
 
   final Function onTapMovie;
+  final List<MovieVO> movieList;
 
   const BestPopularMoviesAndSeriesSection({
-    Key? key, required this.onTapMovie,
+    Key? key, required this.onTapMovie, required this.movieList,
   }) : super(key: key);
 
   @override
@@ -32,6 +35,7 @@ class BestPopularMoviesAndSeriesSection extends StatelessWidget {
         ),
         HorizontalMovieListView(
           onTapMovie: onTapMovie,
+          movieList: movieList,
         ), /// Movie List
       ],
     );
@@ -41,9 +45,10 @@ class BestPopularMoviesAndSeriesSection extends StatelessWidget {
 class HorizontalMovieListView extends StatelessWidget {
 
   final Function onTapMovie;
+  final List<MovieVO> movieList;
 
   const HorizontalMovieListView({
-    Key? key, required this.onTapMovie,
+    Key? key, required this.onTapMovie, required this.movieList,
   }) : super(key: key);
 
   @override
@@ -53,10 +58,11 @@ class HorizontalMovieListView extends StatelessWidget {
       padding: EdgeInsets.only(left: MARGIN_MEDIUM_2X),
       child: ListView.builder( /// ListView
         scrollDirection: Axis.horizontal,
-        itemCount: 10,
+        itemCount: movieList.length,
         itemBuilder: (BuildContext context, int index) {
           return MovieItemView(
             onTapMovie: onTapMovie,
+            movie: movieList[index],
           );
         },
       ),
@@ -67,9 +73,10 @@ class HorizontalMovieListView extends StatelessWidget {
 class MovieItemView extends StatelessWidget {
 
   final Function onTapMovie;
+  final MovieVO movie;
 
   const MovieItemView({
-    Key? key, required this.onTapMovie,
+    Key? key, required this.onTapMovie, required this.movie,
   }) : super(key: key);
 
   @override
@@ -86,7 +93,7 @@ class MovieItemView extends StatelessWidget {
               onTapMovie();
             },
             child: Image.network(
-              "https://www.giantfreakinrobot.com/wp-content/uploads/2021/07/hugh-jackman-wolverine.jpg",
+              IMAGE_BASE_URL + movie.posterPath,
               height: 200,
               fit: BoxFit.cover,
             ),
@@ -94,8 +101,8 @@ class MovieItemView extends StatelessWidget {
           const SizedBox(
             height: MARGIN_MEDIUM,
           ),
-          const Text(
-            "Logan",
+          Text(
+            (movie.title.length >= 7)? movie.title.replaceRange(7, movie.title.length, '...') : movie.title,
             style: TextStyle(
               color: Colors.white,
               fontSize: TEXT_REGULAR_2X,
@@ -107,8 +114,8 @@ class MovieItemView extends StatelessWidget {
           ),
           Row(
             children: [
-              const Text(
-                "8.0",
+              Text(
+                movie.voteAverage.toString(),
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: TEXT_REGULAR_2X,

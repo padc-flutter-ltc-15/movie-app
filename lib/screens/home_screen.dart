@@ -1,17 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:themovieapp/data/models/movie_model.dart';
+import 'package:themovieapp/data/models/movie_model_impl.dart';
 import 'package:themovieapp/resources/colors.dart';
 import 'package:themovieapp/resources/dimens.dart';
 import 'package:themovieapp/resources/strings.dart';
 import 'package:themovieapp/screens/detail_screen.dart';
 import 'package:themovieapp/views/genre_view.dart';
+import '../data/vos/movie_vo.dart';
 import '../views/actors_and_creators_view.dart';
 import '../views/banner_view.dart';
 import '../views/check_movie_show_time_view.dart';
 import '../views/movie_view.dart';
 import '../views/showcase_view.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+
+  MovieModel movieModel = MovieModelImpl();
+
+  List<MovieVO>? nowPlayingMovieList;
+
+  /// Network call are write in this initState()
+  /// Because it will not refresh every time Widget is refreshed
+  @override
+  void initState() {
+    movieModel.getNowPlayingMovies()
+    .then((value) {
+      setState(() {
+        nowPlayingMovieList = value;
+      });
+    })
+    .catchError((error) {
+      debugPrint(error.toString());
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +78,7 @@ class HomeScreen extends StatelessWidget {
               ),
               BestPopularMoviesAndSeriesSection(
                 onTapMovie: () => _navigateToDetailScreen(context),
+                movieList: (nowPlayingMovieList != null) ? nowPlayingMovieList! : [],
               ),
               SizedBox(
                 height: MARGIN_MEDIUM_2X,

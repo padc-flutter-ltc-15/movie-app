@@ -11,8 +11,8 @@ class RetrofitMovieDataAgentImpl extends MovieDataAgent {
 
   late TheMovieApi movieApi;
 
-  /// static variable
-  static RetrofitMovieDataAgentImpl _singleton = RetrofitMovieDataAgentImpl._internal();
+  /// static final variable
+  static final RetrofitMovieDataAgentImpl _singleton = RetrofitMovieDataAgentImpl._internal();
 
   /// factory constructor
   factory RetrofitMovieDataAgentImpl() {
@@ -41,6 +41,7 @@ class RetrofitMovieDataAgentImpl extends MovieDataAgent {
         .catchError((error) => {
           debugPrint("Error=============> ${error.toString()}")
         });*/
+
     return movieApi.getNowPlayingMovies(API_KEY, LANGUAGE_EN_US, page.toString())
         .asStream()
         .map((response) => response.results)
