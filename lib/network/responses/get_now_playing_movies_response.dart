@@ -4,7 +4,7 @@ import 'package:themovieapp/data/vos/movie_vo.dart';
 
 import '../../data/vos/date_vo.dart';
 
-part 'get_now_playing_response.g.dart';
+part 'get_now_playing_movies_response.g.dart';
 
 /*
 {
@@ -19,7 +19,7 @@ part 'get_now_playing_response.g.dart';
 }
  */
 @JsonSerializable()
-class GetNowPlayingResponse {
+class GetNowPlayingMoviesResponse {
   @JsonKey(name: "dates")
   DateVO? dates;
   @JsonKey(name: "results")
@@ -31,15 +31,15 @@ class GetNowPlayingResponse {
   @JsonKey(name: "total_results")
   int? totalResults;
 
-  GetNowPlayingResponse(
+  GetNowPlayingMoviesResponse(
       this.dates,
       this.results,
       this.page,
       this.totalPages,
       this.totalResults);
 
-  factory GetNowPlayingResponse.fromJson(Map<String, dynamic> json) => _$GetNowPlayingResponseFromJson(json);
+  factory GetNowPlayingMoviesResponse.fromJson(Map<String, dynamic> json) => _$GetNowPlayingMoviesResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$GetNowPlayingResponseToJson(this);
+  Map<String, dynamic> toJson() => _$GetNowPlayingMoviesResponseToJson(this);
 
 }

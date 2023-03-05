@@ -1,15 +1,20 @@
 
 import 'package:flutter/material.dart';
+import 'package:themovieapp/network/api_constants.dart';
 import 'package:themovieapp/resources/strings.dart';
 
+import '../data/vos/movie_vo.dart';
 import '../resources/colors.dart';
 import '../resources/dimens.dart';
 import '../widgets/title_text.dart';
 import '../widgets/title_text_with_see_more.dart';
 
 class ShowCasesSection extends StatelessWidget {
+
+  final List<MovieVO> movieList;
+
   const ShowCasesSection({
-    Key? key,
+    Key? key, required this.movieList,
   }) : super(key: key);
 
   @override
@@ -31,13 +36,22 @@ class ShowCasesSection extends StatelessWidget {
         Container(
           height: MOVIE_LIST_HEIGH,
           padding: EdgeInsets.only(left: MARGIN_MEDIUM_2X),
-          child: ListView(
+          /*child: ListView(
             scrollDirection: Axis.horizontal,
             children: [
               ShowCaseView(),
               ShowCaseView(),
               ShowCaseView(),
             ],
+          ),*/
+          child: ListView.builder( /// ListView
+            scrollDirection: Axis.horizontal,
+            itemCount: movieList.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ShowCaseView(
+                movie: movieList[index],
+              );
+            },
           ),
         )
       ],
@@ -46,8 +60,10 @@ class ShowCasesSection extends StatelessWidget {
 }
 
 class ShowCaseView extends StatelessWidget {
+  final MovieVO movie;
+
   const ShowCaseView({
-    Key? key,
+    Key? key, required this.movie,
   }) : super(key: key);
 
   @override
@@ -59,7 +75,7 @@ class ShowCaseView extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Image.network(
-              "https://www.koimoi.com/wp-content/new-galleries/2022/10/deadpool-4-has-allegedly-already-been-greenlit-by-marvel-001.jpg",
+              "$IMAGE_BASE_URL${movie.posterPath}",
               fit: BoxFit.cover,
             ),
           ),
@@ -80,7 +96,7 @@ class ShowCaseView extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min, /// stick to bottom
                 children: [
                   Text(
-                    "Deadpool",
+                    movie.title,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: TEXT_REGULAR_3X,
@@ -90,7 +106,7 @@ class ShowCaseView extends StatelessWidget {
                   SizedBox(
                     height: MARGIN_SMALL,
                   ),
-                  TitleText(title: "Dec 15, 2023")
+                  TitleText(title: movie.releaseDate)
                 ],
               ),
             ),

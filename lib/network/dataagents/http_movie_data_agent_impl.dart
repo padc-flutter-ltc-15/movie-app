@@ -1,8 +1,11 @@
 
 import 'package:flutter/cupertino.dart';
+import 'package:themovieapp/data/vos/actor_vo.dart';
+import 'package:themovieapp/data/vos/genre_vo.dart';
 import 'package:themovieapp/network/api_constants.dart';
 import 'package:themovieapp/network/dataagents/movie_data_agent.dart';
 import 'package:http/http.dart' as http;
+import 'package:themovieapp/network/responses/get_movie_details_response.dart';
 
 import '../../data/vos/movie_vo.dart';
 
@@ -16,7 +19,7 @@ class HttpMovieDataAgentImpl extends MovieDataAgent {
       PARAM_PAGE: page.toString()
     };
 
-    var nowPlayingUri = Uri.https(BASE_URL_HTTP, ENDPOINT_NOW_PLAYING, queryParameters);
+    var nowPlayingUri = Uri.https(BASE_URL_HTTP, ENDPOINT_GET_NOW_PLAYING, queryParameters);
 
     /*http.get(nowPlayingUri)
         .then((response) => {
@@ -26,5 +29,41 @@ class HttpMovieDataAgentImpl extends MovieDataAgent {
           debugPrint("Error=============> ${error.toString()}")
         });*/
     return Future(() => null);
+  }
+
+  @override
+  Future<List<ActorVO>?> getActors(int page) {
+    // TODO: implement getActors
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<GetMovieDetailsResponse?> getMovieDetails(int id) {
+    // TODO: implement getMovieDetails
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<GenreVO>?> getMovieGenres(int page) {
+    // TODO: implement getMovieGenres
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<MovieVO>?> getMoviesByGenre(int page, int genreId) {
+    // TODO: implement getMoviesByGenre
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<MovieVO>?> getPopularMovies(int page) {
+    // TODO: implement getPopularMovies
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<MovieVO>?> getTopRelatedMovies(int page) {
+    // TODO: implement getTopRelatedMovies
+    throw UnimplementedError();
   }
 }

@@ -3,12 +3,17 @@ import 'dart:ffi';
 
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:themovieapp/network/api_constants.dart';
+import '../data/vos/movie_vo.dart';
 import '../resources/colors.dart';
 import '../resources/dimens.dart';
 import '../widgets/gradient_view.dart';
 
 class BannerSection extends StatefulWidget {
-  const BannerSection({Key? key}) : super(key: key);
+
+  final List<MovieVO> movieList;
+
+  const BannerSection({Key? key, required this.movieList}) : super(key: key);
 
   @override
   State<BannerSection> createState() => _BannerSectionState();
@@ -30,7 +35,7 @@ class _BannerSectionState extends State<BannerSection> {
                 _position = page.toDouble();
               });
             },
-            children: [
+            /*children: [
               BannerView(
                 url: "https://media.gq.com/photos/58b9fda8803bdb766dd69ef7/16:9/w_1280,c_limit/wolverine.jpg",
                 title: "The Wolverine",
@@ -42,11 +47,16 @@ class _BannerSectionState extends State<BannerSection> {
                 url: "https://www.giantfreakinrobot.com/wp-content/uploads/2021/07/hugh-jackman-wolverine.jpg",
                 title: "X Men",
               ),
-            ],
+            ],*/
+            children: widget.movieList
+                .map((item) => BannerView(
+                url: "$IMAGE_BASE_URL${item.posterPath}",
+                title: item.title))
+                .toList(),
           ),
         ),
         DotsIndicator(
-          dotsCount: 3,
+          dotsCount: widget.movieList.length,
           position: _position,
           decorator: DotsDecorator(
             activeColor: HOME_SCREEN_BANNER_DOT_ACTIVE_COLOR,
@@ -127,7 +137,7 @@ class BannerTitleView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start, /// Column တွင် column အတွက် alignment ဆိုရင် crossAxisAlignment
         children: [
           Text(
-              title,
+      (title.length >= 16)? title.replaceRange(16, title.length, '...') : title,
               style: TextStyle(
                 color: Colors.white,
                 fontSize: TEXT_HEADING_1X,

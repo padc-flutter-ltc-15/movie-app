@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:themovieapp/data/models/movie_model.dart';
 import 'package:themovieapp/data/models/movie_model_impl.dart';
+import 'package:themovieapp/data/vos/actor_vo.dart';
+import 'package:themovieapp/data/vos/genre_vo.dart';
 import 'package:themovieapp/resources/colors.dart';
 import 'package:themovieapp/resources/dimens.dart';
 import 'package:themovieapp/resources/strings.dart';
@@ -25,6 +27,11 @@ class _HomeScreenState extends State<HomeScreen> {
   MovieModel movieModel = MovieModelImpl();
 
   List<MovieVO>? nowPlayingMovieList;
+  List<MovieVO>? popularMovieList;
+  List<GenreVO>? genreList;
+  List<MovieVO>? movieByGenreList;
+  List<MovieVO>? topRatedMovieList;
+  List<ActorVO>? actorList;
 
   /// Network call are write in this initState()
   /// Because it will not refresh every time Widget is refreshed
@@ -39,7 +46,62 @@ class _HomeScreenState extends State<HomeScreen> {
     .catchError((error) {
       debugPrint(error.toString());
     });
+    
+    movieModel.getPopularMovies()
+    .then((value) {
+      setState(() {
+        popularMovieList = value;
+      });
+    })
+    .catchError((error) {
+      debugPrint(error.toString());
+    });
+
+    movieModel.getMovieGenres()
+        .then((value) {
+          setState(() {
+            genreList = value;
+
+            _getMoviesByGenre(genreList?.first.id??0);
+          });
+        })
+        .catchError((error) {
+          debugPrint(error.toString());
+        });
+
+    movieModel.getTopRelatedMovies()
+        .then((value) {
+      setState(() {
+        topRatedMovieList = value;
+      });
+    })
+        .catchError((error) {
+      debugPrint(error.toString());
+    });
+
+    movieModel.getActors()
+        .then((value) {
+      setState(() {
+        actorList = value;
+      });
+    })
+        .catchError((error) {
+      debugPrint(error.toString());
+    });
+    
     super.initState();
+  }
+
+  void _getMoviesByGenre(int id) {
+    movieModel.getMoviesByGenre(id)
+    .then((value) {
+      setState(() {
+        movieByGenreList = value;
+      });
+    })
+    .catchError((error) {
+        debugPrint("Error=>" + error.toString());
+    });
   }
 
   @override
@@ -72,35 +134,34 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              BannerSection(), /// Banner
+              BannerSection(
+                movieList: popularMovieList?.take(5).toList()??[],
+              ), /// Banner
               SizedBox(
                 height: MARGIN_MEDIUM_2X,
               ),
               BestPopularMoviesAndSeriesSection(
                 onTapMovie: () => _navigateToDetailScreen(context),
-                movieList: (nowPlayingMovieList != null) ? nowPlayingMovieList! : [],
+                movieList: nowPlayingMovieList??[],
               ),
               SizedBox(
                 height: MARGIN_MEDIUM_2X,
               ),
               CheckMovieShowTimeSection(),
               GenreSection(
-                genreList: [
-                  "Horror",
-                  "Funny",
-                  "Biography",
-                  "Trilogy",
-                  "Sport",
-                  "Hollywood",
-                  "Asian",
-                  "Bollywood"
-                ],
+                genreList: genreList??[],
+                movieList: movieByGenreList??[],
                 onTabMovie: () => _navigateToDetailScreen(context),
+                onTabGenre: (id) {
+                  _getMoviesByGenre(id);
+                },
               ),
               SizedBox(
                 height: MARGIN_MEDIUM_2X,
               ),
-              ShowCasesSection(),
+              ShowCasesSection(
+                movieList: topRatedMovieList??[],
+              ),
               SizedBox(
                 height: MARGIN_MEDIUM_2X,
               ),
@@ -108,6 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 title: MAIN_SCREEN_BEST_ACTORS,
                 seeMore: MAIN_SCREEN_SEE_MORE_ACTORS,
                 seeMoreVisibility: true,
+                actorList: actorList??[],
               )
             ],
           ),

@@ -1,7 +1,10 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:themovieapp/data/vos/actor_vo.dart';
+import 'package:themovieapp/data/vos/genre_vo.dart';
 import 'package:themovieapp/network/dataagents/movie_data_agent.dart';
+import 'package:themovieapp/network/responses/get_movie_details_response.dart';
 
 import '../../data/vos/movie_vo.dart';
 import '../api_constants.dart';
@@ -24,6 +27,42 @@ class DioMovieDataAgentImpl extends MovieDataAgent {
           debugPrint("Error=============> ${error.toString()}")
         });*/
     return Future(() => null);
+  }
+
+  @override
+  Future<List<ActorVO>?> getActors(int page) {
+    // TODO: implement getActors
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<GetMovieDetailsResponse?> getMovieDetails(int id) {
+    // TODO: implement getMovieDetails
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<GenreVO>?> getMovieGenres(int page) {
+    // TODO: implement getMovieGenres
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<MovieVO>?> getMoviesByGenre(int page, int genreId) {
+    // TODO: implement getMoviesByGenre
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<MovieVO>?> getPopularMovies(int page) {
+    // TODO: implement getPopularMovies
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<MovieVO>?> getTopRelatedMovies(int page) {
+    // TODO: implement getTopRelatedMovies
+    throw UnimplementedError();
   }
 
 }

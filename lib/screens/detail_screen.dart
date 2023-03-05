@@ -75,6 +75,7 @@ class DetailScreen extends StatelessWidget {
                     title: MAIN_SCREEN_BEST_ACTORS,
                     seeMore: MAIN_SCREEN_SEE_MORE_ACTORS,
                     seeMoreVisibility: false,
+                    actorList: [],
                   ),
                   SizedBox(
                     height: MARGIN_LARGE,
@@ -89,6 +90,7 @@ class DetailScreen extends StatelessWidget {
                   ActorsAndCreatorsSection(
                     title: MAIN_SCREEN_CREATORS,
                     seeMore: MAIN_SCREEN_SEE_MORE_CREATORS,
+                    actorList: [],
                   ),
                 ]
               ),

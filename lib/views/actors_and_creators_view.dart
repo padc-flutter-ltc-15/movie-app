@@ -1,7 +1,9 @@
 
 import 'package:flutter/material.dart';
+import 'package:themovieapp/network/api_constants.dart';
 import 'package:themovieapp/resources/strings.dart';
 
+import '../data/vos/actor_vo.dart';
 import '../resources/dimens.dart';
 import '../widgets/title_text_with_see_more.dart';
 
@@ -10,9 +12,10 @@ class ActorsAndCreatorsSection extends StatelessWidget {
   final String title;
   final String seeMore;
   final bool seeMoreVisibility;
+  final List<ActorVO> actorList;
 
   const ActorsAndCreatorsSection({
-    Key? key, required this.title, required this.seeMore, this.seeMoreVisibility = true,
+    Key? key, required this.title, required this.seeMore, this.seeMoreVisibility = true, required this.actorList,
   }) : super(key: key);
 
   @override
@@ -35,13 +38,14 @@ class ActorsAndCreatorsSection extends StatelessWidget {
         Container(
           height: ACTOR_LIST_HEIGH,
           padding: EdgeInsets.only(left: MARGIN_MEDIUM_2X),
-          child: ListView(
+          child: ListView.builder( /// ListView
             scrollDirection: Axis.horizontal,
-            children: [
-              ActorViewItem(),
-              ActorViewItem(),
-              ActorViewItem(),
-            ],
+            itemCount: actorList.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ActorViewItem(
+                actor: actorList[index],
+              );
+            },
           ),
         )
       ],
@@ -50,8 +54,11 @@ class ActorsAndCreatorsSection extends StatelessWidget {
 }
 
 class ActorViewItem extends StatelessWidget {
+
+  final ActorVO actor;
+
   const ActorViewItem({
-    Key? key,
+    Key? key, required this.actor,
   }) : super(key: key);
 
   @override
@@ -62,7 +69,7 @@ class ActorViewItem extends StatelessWidget {
       child: Stack(
         children: [
           Positioned.fill(
-            child: ActorImageView(),
+            child: ActorImageView(actor: actor,),
           ),
           Align(
             alignment: Alignment.topRight,
@@ -75,7 +82,7 @@ class ActorViewItem extends StatelessWidget {
             alignment: Alignment.bottomLeft,
             child: Padding(
               padding: const EdgeInsets.all(MARGIN_MEDIUM),
-              child: ActorNameAndLike(),
+              child: ActorNameAndLike(actor: actor,),
             ),
           )
         ],
@@ -85,14 +92,17 @@ class ActorViewItem extends StatelessWidget {
 }
 
 class ActorImageView extends StatelessWidget {
+
+  final ActorVO actor;
+
   const ActorImageView({
-    Key? key,
+    Key? key, required this.actor,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Image.network(
-      "https://cdn.i-scmp.com/sites/default/files/d8/images/canvas/2022/01/07/640ae4c6-a328-4104-8dc4-5287d8bccae1_109a9bae.jpg",
+      "$IMAGE_BASE_URL${actor.profilePath}",
       fit: BoxFit.cover,
     );
   }
@@ -114,8 +124,10 @@ class LikeButtonView extends StatelessWidget {
 }
 
 class ActorNameAndLike extends StatelessWidget {
+  final ActorVO actor;
+
   const ActorNameAndLike({
-    Key? key,
+    Key? key, required this.actor,
   }) : super(key: key);
 
   @override
@@ -125,7 +137,7 @@ class ActorNameAndLike extends StatelessWidget {
       mainAxisSize: MainAxisSize.min, /// stick to bottom
       children: [
         Text(
-          "Keanu Reeves",
+          actor.name,
           style: TextStyle(
               color: Colors.white,
               fontSize: TEXT_REGULAR,

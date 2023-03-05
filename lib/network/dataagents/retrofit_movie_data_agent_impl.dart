@@ -1,8 +1,11 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:themovieapp/data/vos/actor_vo.dart';
+import 'package:themovieapp/data/vos/genre_vo.dart';
 import 'package:themovieapp/network/api_constants.dart';
 import 'package:themovieapp/network/dataagents/movie_data_agent.dart';
+import 'package:themovieapp/network/responses/get_movie_details_response.dart';
 import 'package:themovieapp/network/the_movie_api.dart';
 
 import '../../data/vos/movie_vo.dart';
@@ -43,6 +46,54 @@ class RetrofitMovieDataAgentImpl extends MovieDataAgent {
         });*/
 
     return movieApi.getNowPlayingMovies(API_KEY, LANGUAGE_EN_US, page.toString())
+        .asStream()
+        .map((response) => response.results)
+        .first;
+  }
+
+  @override
+  Future<List<ActorVO>?> getActors(int page) {
+    return movieApi.getActors(API_KEY, LANGUAGE_EN_US, page.toString())
+        .asStream()
+        .map((response) => response.results)
+        .first;
+  }
+
+  @override
+  Future<GetMovieDetailsResponse?> getMovieDetails(int id) {
+    return movieApi.getMovieDetails(API_KEY, LANGUAGE_EN_US, id)
+        .asStream()
+        .map((response) => response)
+        .first;
+  }
+
+  @override
+  Future<List<GenreVO>?> getMovieGenres(int page) {
+    return movieApi.getMovieGenres(API_KEY, LANGUAGE_EN_US)
+        .asStream()
+        .map((response) => response.genres)
+        .first;
+  }
+
+  @override
+  Future<List<MovieVO>?> getMoviesByGenre(int page, int genreId) {
+    return movieApi.getMoviesByGenre(API_KEY, LANGUAGE_EN_US, page.toString(), genreId)
+        .asStream()
+        .map((response) => response.results)
+        .first;
+  }
+
+  @override
+  Future<List<MovieVO>?> getPopularMovies(int page) {
+    return movieApi.getPopularMovies(API_KEY, LANGUAGE_EN_US, page.toString())
+        .asStream()
+        .map((response) => response.results)
+        .first;
+  }
+
+  @override
+  Future<List<MovieVO>?> getTopRelatedMovies(int page) {
+    return movieApi.getTopRelatedMovies(API_KEY, LANGUAGE_EN_US, page.toString())
         .asStream()
         .map((response) => response.results)
         .first;

@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:themovieapp/data/vos/genre_vo.dart';
+import 'package:themovieapp/data/vos/movie_vo.dart';
 import 'package:themovieapp/resources/colors.dart';
 
 import '../resources/dimens.dart';
@@ -7,11 +9,13 @@ import 'movie_view.dart';
 
 class GenreSection extends StatelessWidget {
 
-  final List<String> genreList;
+  final List<GenreVO> genreList;
+  final List<MovieVO> movieList;
   final Function onTabMovie;
+  final Function onTabGenre;
 
   const GenreSection({
-    Key? key, required this.genreList, required this.onTabMovie,
+    Key? key, required this.genreList, required this.onTabMovie, required this.movieList, required this.onTabGenre,
   }) : super(key: key);
 
   @override
@@ -29,8 +33,12 @@ class GenreSection extends StatelessWidget {
               unselectedLabelColor: HOME_SCREEN_LIST_TITLE_COLOR,
               tabs: genreList.map(
                       (genre) => Tab(
-                        child: Text(genre),
-                      ),).toList(),
+                        child: Text(genre.name),
+                      ),
+              ).toList(),
+              onTap: (index) {
+                onTabGenre(genreList[index].id);
+              },
             ),
           ),
         ),
@@ -39,7 +47,7 @@ class GenreSection extends StatelessWidget {
         ),
         HorizontalMovieListView(
           onTapMovie: onTabMovie,
-          movieList: [],
+          movieList: movieList,
         ), /// Movie List
       ],
     );
