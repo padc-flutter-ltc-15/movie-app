@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:themovieapp/data/vos/genre_vo.dart';
+import 'package:themovieapp/network/api_constants.dart';
+import 'package:themovieapp/network/responses/get_movie_details_credits_response.dart';
+import 'package:themovieapp/network/responses/get_movie_details_response.dart';
 import 'package:themovieapp/resources/colors.dart';
 import 'package:themovieapp/resources/dimens.dart';
 import 'package:themovieapp/resources/strings.dart';
@@ -6,10 +10,50 @@ import 'package:themovieapp/widgets/gradient_view.dart';
 import 'package:themovieapp/widgets/rating_view.dart';
 import 'package:themovieapp/widgets/title_text.dart';
 
+import '../data/models/movie_model.dart';
+import '../data/models/movie_model_impl.dart';
 import '../views/actors_and_creators_view.dart';
 
-class DetailScreen extends StatelessWidget {
-  const DetailScreen({Key? key}) : super(key: key);
+class DetailScreen extends StatefulWidget {
+  final int id;
+
+  const DetailScreen({Key? key, required this.id}) : super(key: key);
+
+  @override
+  State<DetailScreen> createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
+
+  MovieModel movieModel = MovieModelImpl();
+
+  GetMovieDetailsResponse? movieDetailsResponse;
+  GetMovieDetailsCreditsResponse? movieDetailsCreditsResponse;
+
+  @override
+  void initState() {
+    movieModel.getMovieDetails(widget.id)
+        .then((value) {
+      setState(() {
+        movieDetailsResponse = value;
+      });
+    })
+        .catchError((error) {
+      debugPrint(error.toString());
+    });
+
+    movieModel.getMovieDetailsCredits(widget.id)
+        .then((value) {
+      setState(() {
+        movieDetailsCreditsResponse = value;
+      });
+    })
+        .catchError((error) {
+      debugPrint(error.toString());
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +66,7 @@ class DetailScreen extends StatelessWidget {
               onTapBack: () {
                 Navigator.pop(context);
               },
+              movieDetailsResponse: movieDetailsResponse,
             ),
             SliverList(
               delegate: SliverChildListDelegate(
@@ -31,16 +76,14 @@ class DetailScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         TrailerSection(
-                          genreList: [
-                            "Action",
-                            "Family",
-                            "Fantasy"
-                          ],
+                          genreList: movieDetailsResponse?.genres??[],
                         ),
                         SizedBox(
                           height: MARGIN_MEDIUM,
                         ),
-                        StoryLineView(),
+                        StoryLineView(
+                          text: movieDetailsResponse?.overview??"",
+                        ),
                         SizedBox(
                           height: MARGIN_MEDIUM_2X,
                         ),
@@ -75,14 +118,16 @@ class DetailScreen extends StatelessWidget {
                     title: MAIN_SCREEN_BEST_ACTORS,
                     seeMore: MAIN_SCREEN_SEE_MORE_ACTORS,
                     seeMoreVisibility: false,
-                    actorList: [],
+                    actorList: movieDetailsCreditsResponse?.cast??[],
                   ),
                   SizedBox(
                     height: MARGIN_LARGE,
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_2X),
-                    child: AboutFilmSection(),
+                    child: AboutFilmSection(
+                      movieDetailsResponse: movieDetailsResponse,
+                    ),
                   ),
                   SizedBox(
                     height: MARGIN_MEDIUM_2X,
@@ -90,7 +135,7 @@ class DetailScreen extends StatelessWidget {
                   ActorsAndCreatorsSection(
                     title: MAIN_SCREEN_CREATORS,
                     seeMore: MAIN_SCREEN_SEE_MORE_CREATORS,
-                    actorList: [],
+                    actorList: movieDetailsCreditsResponse?.crew??[],
                   ),
                 ]
               ),
@@ -103,8 +148,10 @@ class DetailScreen extends StatelessWidget {
 }
 
 class AboutFilmSection extends StatelessWidget {
+  final GetMovieDetailsResponse? movieDetailsResponse;
+
   const AboutFilmSection({
-    Key? key,
+    Key? key, required this.movieDetailsResponse,
   }) : super(key: key);
 
   @override
@@ -118,7 +165,7 @@ class AboutFilmSection extends StatelessWidget {
         ),
         AboutFilmInfoView(
           title: "Original Title",
-          description: "Spiderman: No Way Home",
+          description: movieDetailsResponse?.title??"",
         ),
         SizedBox(
           height: MARGIN_MEDIUM,
@@ -132,21 +179,21 @@ class AboutFilmSection extends StatelessWidget {
         ),
         AboutFilmInfoView(
           title: "Production",
-          description: "Marvel",
+          description: "Hollywood",
         ),
         SizedBox(
           height: MARGIN_MEDIUM,
         ),
         AboutFilmInfoView(
           title: "Premiere",
-          description: "Sept 1, 2023",
+          description: movieDetailsResponse?.releaseDate??"",
         ),
         SizedBox(
           height: MARGIN_MEDIUM,
         ),
         AboutFilmInfoView(
           title: "Description",
-          description: LOREM_IPSM,
+          description: movieDetailsResponse?.overview??"",
         )
       ],
     );
@@ -251,8 +298,10 @@ class MovieDetailScreenButtonView extends StatelessWidget {
 }
 
 class StoryLineView extends StatelessWidget {
+  final String text;
+
   const StoryLineView({
-    Key? key,
+    Key? key, required this.text,
   }) : super(key: key);
 
   @override
@@ -265,7 +314,7 @@ class StoryLineView extends StatelessWidget {
           height: MARGIN_SMALL,
         ),
         Text(
-          "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available.",
+          text,
           style: TextStyle(
             color: Colors.white,
             fontSize: TEXT_REGULAR_2X,
@@ -278,7 +327,7 @@ class StoryLineView extends StatelessWidget {
 
 class TrailerSection extends StatelessWidget {
 
-  final List<String> genreList;
+  final List<GenreVO> genreList;
 
   const TrailerSection({
     Key? key, required this.genreList,
@@ -307,7 +356,7 @@ class TrailerSection extends StatelessWidget {
           width: MARGIN_MEDIUM,
         ),
         Row(
-          children: genreList.map((genre) => GenreChipView(name: genre)).toList(),
+          children: genreList.map((genre) => GenreChipView(name: genre.name)).toList(),
         ),
         Spacer(),
         Icon(
@@ -351,10 +400,12 @@ class GenreChipView extends StatelessWidget {
 }
 
 class MovieDetailSliverAppBarView extends StatelessWidget {
+  final GetMovieDetailsResponse? movieDetailsResponse;
+
   final Function onTapBack;
 
   const MovieDetailSliverAppBarView({
-    Key? key, required this.onTapBack,
+    Key? key, required this.onTapBack, this.movieDetailsResponse,
   }) : super(key: key);
 
   @override
@@ -367,7 +418,7 @@ class MovieDetailSliverAppBarView extends StatelessWidget {
         background: Stack(children: [
           Positioned.fill(
             child: Image.network(
-              "https://terrigen-cdn-dev.marvel.com/content/prod/1x/maguiregarfieldholland_opt.jpg",
+              "$IMAGE_BASE_URL${movieDetailsResponse?.posterPath??""}",
               fit: BoxFit.cover,
             ),
           ),
@@ -404,7 +455,7 @@ class MovieDetailSliverAppBarView extends StatelessWidget {
                 right: MARGIN_MEDIUM_2X,
                 bottom: MARGIN_LARGE,
               ),
-              child: MovieDetailAppBarInfoView(),
+              child: MovieDetailAppBarInfoView(movieDetailsResponse: movieDetailsResponse,),
             ),
           ),
         ]),
@@ -414,8 +465,10 @@ class MovieDetailSliverAppBarView extends StatelessWidget {
 }
 
 class MovieDetailAppBarInfoView extends StatelessWidget {
+  final GetMovieDetailsResponse? movieDetailsResponse;
+
   const MovieDetailAppBarInfoView({
-    Key? key,
+    Key? key, this.movieDetailsResponse,
   }) : super(key: key);
 
   @override
@@ -426,7 +479,9 @@ class MovieDetailAppBarInfoView extends StatelessWidget {
       children: [
         Row(
           children: [
-            MovieDetailYearView(),
+            MovieDetailYearView(
+              text: movieDetailsResponse?.releaseDate??"",
+            ),
             Spacer(),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -437,7 +492,7 @@ class MovieDetailAppBarInfoView extends StatelessWidget {
                     SizedBox(
                       height: MARGIN_SMALL,
                     ),
-                    TitleText(title: "3000 VOTES"),
+                    TitleText(title: (movieDetailsResponse?.voteCount??0).toString() + " Votes"),
                     SizedBox(
                       height: MARGIN_MEDIUM_2X,
                     ),
@@ -447,7 +502,7 @@ class MovieDetailAppBarInfoView extends StatelessWidget {
                   width: MARGIN_MEDIUM,
                 ),
                 Text(
-                  "9,76",
+                  (movieDetailsResponse?.voteAverage??0).toString(),
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -462,7 +517,7 @@ class MovieDetailAppBarInfoView extends StatelessWidget {
           height: MARGIN_MEDIUM_2X,
         ),
         Text(
-          "Spiderman: No Way Home",
+          movieDetailsResponse?.title??"",
           style: TextStyle(
             color: Colors.white,
             fontSize: TEXT_HEADING_2X,
@@ -475,8 +530,10 @@ class MovieDetailAppBarInfoView extends StatelessWidget {
 }
 
 class MovieDetailYearView extends StatelessWidget {
+  final String text;
+
   const MovieDetailYearView({
-    Key? key,
+    Key? key, required this.text,
   }) : super(key: key);
 
   @override
@@ -491,7 +548,7 @@ class MovieDetailYearView extends StatelessWidget {
         padding: EdgeInsets.all(MARGIN_MEDIUM),
         child: Center(
           child: Text(
-            "2023",
+            text,
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.white

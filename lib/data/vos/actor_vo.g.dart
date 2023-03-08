@@ -7,9 +7,9 @@ part of 'actor_vo.dart';
 // **************************************************************************
 
 ActorVO _$ActorVOFromJson(Map<String, dynamic> json) => ActorVO(
-      json['id'] as int,
-      json['name'] as String,
-      json['profile_path'] as String,
+      json['id'] as int?,
+      json['name'] as String?,
+      json['profile_path'] as String?,
     );
 
 Map<String, dynamic> _$ActorVOToJson(ActorVO instance) => <String, dynamic>{

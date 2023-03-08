@@ -90,7 +90,7 @@ class MovieItemView extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              onTapMovie();
+              onTapMovie(movie.id);
             },
             child: Image.network(
               IMAGE_BASE_URL + movie.posterPath,

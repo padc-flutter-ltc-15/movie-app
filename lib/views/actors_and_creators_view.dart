@@ -137,7 +137,7 @@ class ActorNameAndLike extends StatelessWidget {
       mainAxisSize: MainAxisSize.min, /// stick to bottom
       children: [
         Text(
-          actor.name,
+          actor.name??"",
           style: TextStyle(
               color: Colors.white,
               fontSize: TEXT_REGULAR,

@@ -7,6 +7,8 @@ import 'package:themovieapp/network/dataagents/movie_data_agent.dart';
 import 'package:themovieapp/network/dataagents/retrofit_movie_data_agent_impl.dart';
 import 'package:themovieapp/network/responses/get_movie_details_response.dart';
 
+import '../../network/responses/get_movie_details_credits_response.dart';
+
 class MovieModelImpl extends MovieModel {
 
   MovieDataAgent _movieDataAgent = RetrofitMovieDataAgentImpl();
@@ -37,6 +39,11 @@ class MovieModelImpl extends MovieModel {
   @override
   Future<GetMovieDetailsResponse?> getMovieDetails(int id) {
     return _movieDataAgent.getMovieDetails(id);
+  }
+
+  @override
+  Future<GetMovieDetailsCreditsResponse?> getMovieDetailsCredits(int id) {
+    return _movieDataAgent.getMovieDetailsCredits(id);
   }
 
   @override

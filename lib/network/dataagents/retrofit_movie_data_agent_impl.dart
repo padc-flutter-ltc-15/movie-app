@@ -9,6 +9,7 @@ import 'package:themovieapp/network/responses/get_movie_details_response.dart';
 import 'package:themovieapp/network/the_movie_api.dart';
 
 import '../../data/vos/movie_vo.dart';
+import '../responses/get_movie_details_credits_response.dart';
 
 class RetrofitMovieDataAgentImpl extends MovieDataAgent {
 
@@ -99,4 +100,17 @@ class RetrofitMovieDataAgentImpl extends MovieDataAgent {
         .first;
   }
 
+  @override
+  Future<GetMovieDetailsCreditsResponse?> getMovieDetailsCredits(int id) {
+    return movieApi.getMovieDetailsCredits(API_KEY, LANGUAGE_EN_US, id)
+        .asStream()
+        .handleError((error) {
+          debugPrint("crews error " + error.toString());
+        })
+        .map((response) {
+          debugPrint("crews " + response.crew.toString());
+          return response;
+        })
+        .first;
+  }
 }

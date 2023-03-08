@@ -80,11 +80,11 @@ part 'actor_vo.g.dart';
 @JsonSerializable()
 class ActorVO {
   @JsonKey(name: "id")
-  int id;
+  int? id;
   @JsonKey(name: "name")
-  String name;
+  String? name;
   @JsonKey(name: "profile_path")
-  String profilePath;
+  String? profilePath;
 
   ActorVO(this.id, this.name, this.profilePath);
 

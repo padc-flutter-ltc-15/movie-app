@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:themovieapp/data/vos/actor_vo.dart';
 import 'package:themovieapp/data/vos/genre_vo.dart';
 import 'package:themovieapp/network/dataagents/movie_data_agent.dart';
+import 'package:themovieapp/network/responses/get_movie_details_credits_response.dart';
 import 'package:themovieapp/network/responses/get_movie_details_response.dart';
 
 import '../../data/vos/movie_vo.dart';
@@ -62,6 +63,12 @@ class DioMovieDataAgentImpl extends MovieDataAgent {
   @override
   Future<List<MovieVO>?> getTopRelatedMovies(int page) {
     // TODO: implement getTopRelatedMovies
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<GetMovieDetailsCreditsResponse?> getMovieDetailsCredits(int id) {
+    // TODO: implement getMovieDetailsCredits
     throw UnimplementedError();
   }
 

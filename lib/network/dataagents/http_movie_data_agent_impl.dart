@@ -5,6 +5,7 @@ import 'package:themovieapp/data/vos/genre_vo.dart';
 import 'package:themovieapp/network/api_constants.dart';
 import 'package:themovieapp/network/dataagents/movie_data_agent.dart';
 import 'package:http/http.dart' as http;
+import 'package:themovieapp/network/responses/get_movie_details_credits_response.dart';
 import 'package:themovieapp/network/responses/get_movie_details_response.dart';
 
 import '../../data/vos/movie_vo.dart';
@@ -64,6 +65,12 @@ class HttpMovieDataAgentImpl extends MovieDataAgent {
   @override
   Future<List<MovieVO>?> getTopRelatedMovies(int page) {
     // TODO: implement getTopRelatedMovies
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<GetMovieDetailsCreditsResponse?> getMovieDetailsCredits(int id) {
+    // TODO: implement getMovieDetailsCredits
     throw UnimplementedError();
   }
 }

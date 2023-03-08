@@ -141,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: MARGIN_MEDIUM_2X,
               ),
               BestPopularMoviesAndSeriesSection(
-                onTapMovie: () => _navigateToDetailScreen(context),
+                onTapMovie: (int id) => _navigateToDetailScreen(context, id),
                 movieList: nowPlayingMovieList??[],
               ),
               SizedBox(
@@ -151,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
               GenreSection(
                 genreList: genreList??[],
                 movieList: movieByGenreList??[],
-                onTabMovie: () => _navigateToDetailScreen(context),
+                onTabMovie: (int id) => _navigateToDetailScreen(context, id),
                 onTabGenre: (id) {
                   _getMoviesByGenre(id);
                 },
@@ -178,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _navigateToDetailScreen(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen()));
+  void _navigateToDetailScreen(BuildContext context, int id) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(id: id,)));
   }
 }
