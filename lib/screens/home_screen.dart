@@ -46,6 +46,13 @@ class _HomeScreenState extends State<HomeScreen> {
     .catchError((error) {
       debugPrint(error.toString());
     });
+
+    movieModel.getNowPlayingMoviesFromDatabase()
+    .then((value) {
+      setState(() {
+        nowPlayingMovieList = value;
+      });
+    });
     
     movieModel.getPopularMovies()
     .then((value) {
@@ -55,6 +62,13 @@ class _HomeScreenState extends State<HomeScreen> {
     })
     .catchError((error) {
       debugPrint(error.toString());
+    });
+
+    movieModel.getPopularMoviesFromDatabase()
+        .then((value) {
+      setState(() {
+        popularMovieList = value;
+      });
     });
 
     movieModel.getMovieGenres()
@@ -69,6 +83,15 @@ class _HomeScreenState extends State<HomeScreen> {
           debugPrint(error.toString());
         });
 
+    movieModel.getMovieGenresFromDatabase()
+        .then((value) {
+      setState(() {
+        genreList = value;
+
+        _getMoviesByGenre(genreList?.first.id??0);
+      });
+    });
+
     movieModel.getTopRelatedMovies()
         .then((value) {
       setState(() {
@@ -77,6 +100,13 @@ class _HomeScreenState extends State<HomeScreen> {
     })
         .catchError((error) {
       debugPrint(error.toString());
+    });
+
+    movieModel.getTopRelatedMoviesFromDatabase()
+        .then((value) {
+      setState(() {
+        topRatedMovieList = value;
+      });
     });
 
     movieModel.getActors()

@@ -61,7 +61,7 @@ class RetrofitMovieDataAgentImpl extends MovieDataAgent {
   }
 
   @override
-  Future<GetMovieDetailsResponse?> getMovieDetails(int id) {
+  Future<GetMovieDetailsResponse> getMovieDetails(int id) {
     return movieApi.getMovieDetails(API_KEY, LANGUAGE_EN_US, id)
         .asStream()
         .map((response) => response)
@@ -101,7 +101,7 @@ class RetrofitMovieDataAgentImpl extends MovieDataAgent {
   }
 
   @override
-  Future<GetMovieDetailsCreditsResponse?> getMovieDetailsCredits(int id) {
+  Future<GetMovieDetailsCreditsResponse> getMovieDetailsCredits(int id) {
     return movieApi.getMovieDetailsCredits(API_KEY, LANGUAGE_EN_US, id)
         .asStream()
         .handleError((error) {
