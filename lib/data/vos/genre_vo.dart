@@ -26,4 +26,14 @@ class GenreVO {
   factory GenreVO.fromJson(Map<String, dynamic> json) => _$GenreVOFromJson(json);
 
   Map<String, dynamic> toJson() => _$GenreVOToJson(this);
+
+  bool sameId(List<int> ids) {
+    for (var id in ids) {
+      if(id == this.id) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 }

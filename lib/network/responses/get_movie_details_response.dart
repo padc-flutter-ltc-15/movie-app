@@ -103,7 +103,7 @@ class GetMovieDetailsResponse {
   @JsonKey(name: "backdrop_path")
   String backDropPath;
   @JsonKey(name: "genres")
-  List<GenreVO>? genres;
+  List<GenreVO> genres;
   @JsonKey(name: "id")
   int id;
   @JsonKey(name: "original_language")
@@ -150,10 +150,12 @@ class GetMovieDetailsResponse {
   Map<String, dynamic> toJson() => _$GetMovieDetailsResponseToJson(this);
 
   MovieVO toMovieVO() {
+    List<int> genreIds = this.genres.map((item) => item.id).toList();
+
     return MovieVO(
       adult = this.adult,
       backDropPath = this.backDropPath,
-      this.genres?.map((item) => item.id).toList()??[],
+      genreIds = genreIds,
       id = this.id,
       originalLanguage = this.originalLanguage,
       originalTitle = this.originalTitle,

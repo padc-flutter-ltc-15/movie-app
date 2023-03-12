@@ -26,6 +26,21 @@ class GenreDao {
     await getGenreBox().putAll(map);
   }
 
+  List<GenreVO>? getGenresByIds(List<int> ids) {
+    List<GenreVO> allGenres = getGenreBox().values.toList();
+    List<GenreVO> filteredGenres = List.empty(growable: true);
+
+    for (var genre in allGenres) {
+      for(var id in ids) {
+        if(id == genre.id) {
+          filteredGenres.add(genre);
+        }
+      }
+    }
+
+    return filteredGenres;
+  }
+
   List<GenreVO> getAllGenres() {
     return getGenreBox().values.toList();
   }

@@ -11,8 +11,8 @@ GetMovieDetailsResponse _$GetMovieDetailsResponseFromJson(
     GetMovieDetailsResponse(
       json['adult'] as bool,
       json['backdrop_path'] as String,
-      (json['genres'] as List<dynamic>?)
-          ?.map((e) => GenreVO.fromJson(e as Map<String, dynamic>))
+      (json['genres'] as List<dynamic>)
+          .map((e) => GenreVO.fromJson(e as Map<String, dynamic>))
           .toList(),
       json['id'] as int,
       json['original_language'] as String,

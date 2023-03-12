@@ -80,6 +80,19 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
+  Future<List<GenreVO>> getMovieGenresByIdsFromDatabase(List<int> ids) {
+    var genres = genreDao
+        .getGenresByIds(ids)
+        ?.toList();
+
+    debugPrint("genres: " + genres.toString());
+
+    return Future.value(
+        genres
+    );
+  }
+
+  @override
   Future<List<MovieVO>?> getMoviesByGenre(int genreId) {
     return _movieDataAgent.getMoviesByGenre(1, genreId);
   }

@@ -21,6 +21,7 @@ abstract class MovieModel {
   Future<List<MovieVO>> getPopularMoviesFromDatabase();
   Future<List<MovieVO>> getTopRelatedMoviesFromDatabase();
   Future<List<GenreVO>> getMovieGenresFromDatabase();
+  Future<List<GenreVO?>> getMovieGenresByIdsFromDatabase(List<int> ids);
   Future<List<ActorVO>> getActorsFromDatabase();
   Future<MovieVO> getMovieDetailsFromDatabase(int id);
 }

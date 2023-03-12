@@ -29,6 +29,7 @@ class _DetailScreenState extends State<DetailScreen> {
   MovieModel movieModel = MovieModelImpl();
 
   MovieVO? movie;
+  List<GenreVO>? genres;
   GetMovieDetailsCreditsResponse? movieDetailsCreditsResponse;
 
   @override
@@ -47,6 +48,11 @@ class _DetailScreenState extends State<DetailScreen> {
     .then((value) {
       setState(() {
         movie = value;
+
+        movieModel.getMovieGenresByIdsFromDatabase(movie?.genreIds??[])
+            .then((value) {
+          genres = (value??[]).cast<GenreVO>();
+        });
       });
     });
 
@@ -84,7 +90,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     child: Column(
                       children: [
                         TrailerSection(
-                          genreList: [],
+                          genreList: genres??[],
                         ),
                         SizedBox(
                           height: MARGIN_MEDIUM,
@@ -335,7 +341,7 @@ class StoryLineView extends StatelessWidget {
 
 class TrailerSection extends StatelessWidget {
 
-  final List<GenreVO> genreList;
+  final List<GenreVO>? genreList;
 
   const TrailerSection({
     Key? key, required this.genreList,
@@ -364,7 +370,7 @@ class TrailerSection extends StatelessWidget {
           width: MARGIN_MEDIUM,
         ),
         Row(
-          children: genreList.map((genre) => GenreChipView(name: genre.name)).toList(),
+          children: genreList?.map((genre) => GenreChipView(name: genre.name)).toList()??[],
         ),
         Spacer(),
         Icon(
