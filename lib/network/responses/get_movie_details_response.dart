@@ -1,5 +1,6 @@
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:themovieapp/data/vos/movie_vo.dart';
 
 import '../../data/vos/genre_vo.dart';
 
@@ -147,4 +148,23 @@ class GetMovieDetailsResponse {
   factory GetMovieDetailsResponse.fromJson(Map<String, dynamic> json) => _$GetMovieDetailsResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$GetMovieDetailsResponseToJson(this);
+
+  MovieVO toMovieVO() {
+    return MovieVO(
+      adult = this.adult,
+      backDropPath = this.backDropPath,
+      this.genres?.map((item) => item.id).toList()??[],
+      id = this.id,
+      originalLanguage = this.originalLanguage,
+      originalTitle = this.originalTitle,
+      overview = this.overview,
+      popularity = this.popularity,
+      posterPath = this.posterPath,
+      releaseDate = this.releaseDate,
+      title = this.title,
+      video = this.video,
+      voteAverage = this.voteAverage,
+      voteCount = this.voteCount,
+    );
+  }
 }

@@ -37,7 +37,7 @@ class DioMovieDataAgentImpl extends MovieDataAgent {
   }
 
   @override
-  Future<GetMovieDetailsResponse?> getMovieDetails(int id) {
+  Future<MovieVO?> getMovieDetails(int id) {
     // TODO: implement getMovieDetails
     throw UnimplementedError();
   }

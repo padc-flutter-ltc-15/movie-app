@@ -61,10 +61,10 @@ class RetrofitMovieDataAgentImpl extends MovieDataAgent {
   }
 
   @override
-  Future<GetMovieDetailsResponse> getMovieDetails(int id) {
+  Future<MovieVO> getMovieDetails(int id) {
     return movieApi.getMovieDetails(API_KEY, LANGUAGE_EN_US, id)
         .asStream()
-        .map((response) => response)
+        .map((response) => response.toMovieVO())
         .first;
   }
 

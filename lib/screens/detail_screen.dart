@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:themovieapp/data/vos/genre_vo.dart';
+import 'package:themovieapp/data/vos/movie_vo.dart';
 import 'package:themovieapp/network/api_constants.dart';
 import 'package:themovieapp/network/responses/get_movie_details_credits_response.dart';
 import 'package:themovieapp/network/responses/get_movie_details_response.dart';
@@ -27,7 +28,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   MovieModel movieModel = MovieModelImpl();
 
-  GetMovieDetailsResponse? movieDetailsResponse;
+  MovieVO? movie;
   GetMovieDetailsCreditsResponse? movieDetailsCreditsResponse;
 
   @override
@@ -35,11 +36,18 @@ class _DetailScreenState extends State<DetailScreen> {
     movieModel.getMovieDetails(widget.id)
         .then((value) {
       setState(() {
-        movieDetailsResponse = value;
+        movie = value;
       });
     })
         .catchError((error) {
       debugPrint(error.toString());
+    });
+
+    movieModel.getMovieDetailsFromDatabase(widget.id)
+    .then((value) {
+      setState(() {
+        movie = value;
+      });
     });
 
     movieModel.getMovieDetailsCredits(widget.id)
@@ -66,7 +74,7 @@ class _DetailScreenState extends State<DetailScreen> {
               onTapBack: () {
                 Navigator.pop(context);
               },
-              movieDetailsResponse: movieDetailsResponse,
+              movie: movie,
             ),
             SliverList(
               delegate: SliverChildListDelegate(
@@ -76,13 +84,13 @@ class _DetailScreenState extends State<DetailScreen> {
                     child: Column(
                       children: [
                         TrailerSection(
-                          genreList: movieDetailsResponse?.genres??[],
+                          genreList: [],
                         ),
                         SizedBox(
                           height: MARGIN_MEDIUM,
                         ),
                         StoryLineView(
-                          text: movieDetailsResponse?.overview??"",
+                          text: movie?.overview??"",
                         ),
                         SizedBox(
                           height: MARGIN_MEDIUM_2X,
@@ -126,7 +134,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_2X),
                     child: AboutFilmSection(
-                      movieDetailsResponse: movieDetailsResponse,
+                      movie: movie,
                     ),
                   ),
                   SizedBox(
@@ -148,10 +156,10 @@ class _DetailScreenState extends State<DetailScreen> {
 }
 
 class AboutFilmSection extends StatelessWidget {
-  final GetMovieDetailsResponse? movieDetailsResponse;
+  final MovieVO? movie;
 
   const AboutFilmSection({
-    Key? key, required this.movieDetailsResponse,
+    Key? key, required this.movie,
   }) : super(key: key);
 
   @override
@@ -165,7 +173,7 @@ class AboutFilmSection extends StatelessWidget {
         ),
         AboutFilmInfoView(
           title: "Original Title",
-          description: movieDetailsResponse?.title??"",
+          description: movie?.title??"",
         ),
         SizedBox(
           height: MARGIN_MEDIUM,
@@ -186,14 +194,14 @@ class AboutFilmSection extends StatelessWidget {
         ),
         AboutFilmInfoView(
           title: "Premiere",
-          description: movieDetailsResponse?.releaseDate??"",
+          description: movie?.releaseDate??"",
         ),
         SizedBox(
           height: MARGIN_MEDIUM,
         ),
         AboutFilmInfoView(
           title: "Description",
-          description: movieDetailsResponse?.overview??"",
+          description: movie?.overview??"",
         )
       ],
     );
@@ -400,12 +408,12 @@ class GenreChipView extends StatelessWidget {
 }
 
 class MovieDetailSliverAppBarView extends StatelessWidget {
-  final GetMovieDetailsResponse? movieDetailsResponse;
+  final MovieVO? movie;
 
   final Function onTapBack;
 
   const MovieDetailSliverAppBarView({
-    Key? key, required this.onTapBack, this.movieDetailsResponse,
+    Key? key, required this.onTapBack, this.movie,
   }) : super(key: key);
 
   @override
@@ -418,7 +426,7 @@ class MovieDetailSliverAppBarView extends StatelessWidget {
         background: Stack(children: [
           Positioned.fill(
             child: Image.network(
-              "$IMAGE_BASE_URL${movieDetailsResponse?.posterPath??""}",
+              "$IMAGE_BASE_URL${movie?.posterPath??""}",
               fit: BoxFit.cover,
             ),
           ),
@@ -455,7 +463,7 @@ class MovieDetailSliverAppBarView extends StatelessWidget {
                 right: MARGIN_MEDIUM_2X,
                 bottom: MARGIN_LARGE,
               ),
-              child: MovieDetailAppBarInfoView(movieDetailsResponse: movieDetailsResponse,),
+              child: MovieDetailAppBarInfoView(movie: movie,),
             ),
           ),
         ]),
@@ -465,10 +473,10 @@ class MovieDetailSliverAppBarView extends StatelessWidget {
 }
 
 class MovieDetailAppBarInfoView extends StatelessWidget {
-  final GetMovieDetailsResponse? movieDetailsResponse;
+  final MovieVO? movie;
 
   const MovieDetailAppBarInfoView({
-    Key? key, this.movieDetailsResponse,
+    Key? key, this.movie,
   }) : super(key: key);
 
   @override
@@ -480,7 +488,7 @@ class MovieDetailAppBarInfoView extends StatelessWidget {
         Row(
           children: [
             MovieDetailYearView(
-              text: movieDetailsResponse?.releaseDate??"",
+              text: movie?.releaseDate??"",
             ),
             Spacer(),
             Row(
@@ -492,7 +500,7 @@ class MovieDetailAppBarInfoView extends StatelessWidget {
                     SizedBox(
                       height: MARGIN_SMALL,
                     ),
-                    TitleText(title: (movieDetailsResponse?.voteCount??0).toString() + " Votes"),
+                    TitleText(title: (movie?.voteCount??0).toString() + " Votes"),
                     SizedBox(
                       height: MARGIN_MEDIUM_2X,
                     ),
@@ -502,7 +510,7 @@ class MovieDetailAppBarInfoView extends StatelessWidget {
                   width: MARGIN_MEDIUM,
                 ),
                 Text(
-                  (movieDetailsResponse?.voteAverage??0).toString(),
+                  (movie?.voteAverage??0).toString(),
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -517,7 +525,7 @@ class MovieDetailAppBarInfoView extends StatelessWidget {
           height: MARGIN_MEDIUM_2X,
         ),
         Text(
-          movieDetailsResponse?.title??"",
+          movie?.title??"",
           style: TextStyle(
             color: Colors.white,
             fontSize: TEXT_HEADING_2X,

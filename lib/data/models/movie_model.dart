@@ -13,7 +13,7 @@ abstract class MovieModel {
   Future<List<GenreVO>?> getMovieGenres();
   Future<List<MovieVO>?> getMoviesByGenre(int genreId);
   Future<List<ActorVO>?> getActors();
-  Future<GetMovieDetailsResponse?> getMovieDetails(int id);
+  Future<MovieVO?> getMovieDetails(int id);
   Future<GetMovieDetailsCreditsResponse?> getMovieDetailsCredits(int id);
 
   /// Database
@@ -22,5 +22,5 @@ abstract class MovieModel {
   Future<List<MovieVO>> getTopRelatedMoviesFromDatabase();
   Future<List<GenreVO>> getMovieGenresFromDatabase();
   Future<List<ActorVO>> getActorsFromDatabase();
-  Future<GetMovieDetailsResponse> getMovieDetailsFromDatabase(int id);
+  Future<MovieVO> getMovieDetailsFromDatabase(int id);
 }

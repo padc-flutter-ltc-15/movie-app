@@ -1,4 +1,5 @@
 
+import 'package:flutter/cupertino.dart';
 import 'package:themovieapp/data/models/movie_model.dart';
 import 'package:themovieapp/data/vos/actor_vo.dart';
 import 'package:themovieapp/data/vos/genre_vo.dart';
@@ -45,6 +46,8 @@ class MovieModelImpl extends MovieModel {
       }).toList()??[];
 
       movieDao.saveAllMovies(nowPlayingMovieList);
+
+      return Future.value(movies);
     });
   }
 
@@ -54,7 +57,7 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  Future<GetMovieDetailsResponse?> getMovieDetails(int id) {
+  Future<MovieVO?> getMovieDetails(int id) {
     return _movieDataAgent.getMovieDetails(id);
   }
 
@@ -71,6 +74,8 @@ class MovieModelImpl extends MovieModel {
       }).toList()??[];
 
       genreDao.saveAllGenres(genreList);
+
+      return Future.value(genres);
     });
   }
 
@@ -91,6 +96,8 @@ class MovieModelImpl extends MovieModel {
       }).toList()??[];
 
       movieDao.saveAllMovies(popularMovieList);
+
+      return Future.value(movies);
     });
   }
 
@@ -106,6 +113,8 @@ class MovieModelImpl extends MovieModel {
       }).toList()??[];
 
       movieDao.saveAllMovies(topRelatedMovieList);
+
+      return Future.value(movies);
     });
   }
 
@@ -119,9 +128,14 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  Future<GetMovieDetailsResponse> getMovieDetailsFromDatabase(int id) {
-    // TODO: implement getMovieDetailsFromDatabase
-    throw UnimplementedError();
+  Future<MovieVO> getMovieDetailsFromDatabase(int id) {
+    var movie = movieDao.getMovieById(id);
+
+    debugPrint("movie: " + movie.toString());
+
+    return Future.value(
+      movie
+    );
   }
 
   @override
