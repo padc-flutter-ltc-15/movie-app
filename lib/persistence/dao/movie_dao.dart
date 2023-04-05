@@ -17,6 +17,38 @@ class MovieDao {
 
   }
 
+  /// Reactive Programming
+
+  Stream<void> getAllMoviesEventStream() {
+    return getMovieBox().watch();
+  }
+
+  Stream<List<MovieVO>> getNowPlayingMoviesStream() {
+    return Stream.value(
+        getAllMovies()
+        .where((movie) => movie.isNowPlaying??false)
+        .toList()
+    );
+  }
+
+  Stream<List<MovieVO>> getTopRatedMoviesStream() {
+    return Stream.value(
+        getAllMovies()
+        .where((movie) => movie.isTopRated??false)
+        .toList()
+    );
+  }
+
+  Stream<List<MovieVO>> getPopularMoviesStream() {
+    return Stream.value(
+        getAllMovies()
+        .where((movie) => movie.isPopular??false)
+        .toList()
+    );
+  }
+
+  /// Reactive Programming
+
   void saveMovie(MovieVO movie) async {
     await getMovieBox().put(movie.id, movie);
   }

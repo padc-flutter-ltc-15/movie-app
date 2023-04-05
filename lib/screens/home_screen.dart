@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Because it will not refresh every time Widget is refreshed
   @override
   void initState() {
-    movieModel.getNowPlayingMovies()
+    /*movieModel.getNowPlayingMovies(1)
     .then((value) {
       setState(() {
         nowPlayingMovieList = value;
@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
     })
     .catchError((error) {
       debugPrint(error.toString());
-    });
+    });*/
 
     movieModel.getNowPlayingMoviesFromDatabase()
     .then((value) {
@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     });
     
-    movieModel.getPopularMovies()
+    /*movieModel.getPopularMovies(1)
     .then((value) {
       setState(() {
         popularMovieList = value;
@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
     })
     .catchError((error) {
       debugPrint(error.toString());
-    });
+    });*/
 
     movieModel.getPopularMoviesFromDatabase()
         .then((value) {
@@ -92,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     });
 
-    movieModel.getTopRelatedMovies()
+    /*movieModel.getTopRelatedMovies(1)
         .then((value) {
       setState(() {
         topRatedMovieList = value;
@@ -100,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
     })
         .catchError((error) {
       debugPrint(error.toString());
-    });
+    });*/
 
     movieModel.getTopRelatedMoviesFromDatabase()
         .then((value) {
