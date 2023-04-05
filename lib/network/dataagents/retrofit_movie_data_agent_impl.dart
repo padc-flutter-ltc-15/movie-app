@@ -29,23 +29,8 @@ class RetrofitMovieDataAgentImpl extends MovieDataAgent {
     movieApi = TheMovieApi(dio);
   }
 
-  /*RetrofitMovieDataAgentImpl() {
-    final dio = Dio();
-    movieApi = TheMovieApi(dio);
-  }*/
-
   @override
   Future<List<MovieVO>?> getNowPlayingMovies(int page) {
-    /*movieApi.getNowPlayingMovies(API_KEY, LANGUAGE_EN_US, page.toString())
-        .then((response) => {
-          response.results?.forEach((movie) {
-            debugPrint("Movie=============> ${movie.toString()}");
-          })
-        })
-        .catchError((error) => {
-          debugPrint("Error=============> ${error.toString()}")
-        });*/
-
     return movieApi.getNowPlayingMovies(API_KEY, LANGUAGE_EN_US, page.toString())
         .asStream()
         .map((response) => response.results)

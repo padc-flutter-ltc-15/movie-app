@@ -162,62 +162,35 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  Future<List<MovieVO>> getNowPlayingMoviesFromDatabase() {
-    /*return Future.value(
-        movieDao
-            .getAllMovies()
-            .where((movie) => movie.isNowPlaying ?? true)
-            .toList()
-    );*/
+  Stream<List<MovieVO>> getNowPlayingMoviesFromDatabase() {
 
-    this.getNowPlayingMovies(1);
+    getNowPlayingMovies(1);
 
     return movieDao
         .getAllMoviesEventStream()
         .startWith(movieDao.getNowPlayingMoviesStream())
-        .combineLatest(movieDao.getNowPlayingMoviesStream(),
-            (event, movieList) => movieList as List<MovieVO>
-        )
-        .first;
+        .map((event) => movieDao.getNowPlayingMoviesStream());
   }
 
   @override
-  Future<List<MovieVO>> getPopularMoviesFromDatabase() {
-    /*return Future.value(
-        movieDao
-            .getAllMovies()
-            .where((movie) => movie.isPopular ?? true)
-            .toList()
-    );*/
+  Stream<List<MovieVO>> getPopularMoviesFromDatabase() {
 
-    this.getPopularMovies(1);
+    getPopularMovies(1);
 
     return movieDao
         .getAllMoviesEventStream()
         .startWith(movieDao.getPopularMoviesStream())
-        .combineLatest(movieDao.getPopularMoviesStream(),
-            (event, movieList) => movieList as List<MovieVO>
-        )
-        .first;
+        .map((event) => movieDao.getPopularMoviesStream());
   }
 
   @override
-  Future<List<MovieVO>> getTopRelatedMoviesFromDatabase() {
-    /*return Future.value(
-        movieDao
-            .getAllMovies()
-            .where((movie) => movie.isTopRated ?? true)
-            .toList()
-    );*/
+  Stream<List<MovieVO>> getTopRelatedMoviesFromDatabase() {
 
-    this.getTopRelatedMovies(1);
+    getTopRelatedMovies(1);
 
     return movieDao
         .getAllMoviesEventStream()
         .startWith(movieDao.getTopRatedMoviesStream())
-        .combineLatest(movieDao.getTopRatedMoviesStream(),
-          (event, movieList) => movieList as List<MovieVO>
-        )
-        .first;
+        .map((event) => movieDao.getTopRatedMoviesStream());
   }
 }

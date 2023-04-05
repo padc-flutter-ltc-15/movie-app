@@ -17,9 +17,9 @@ abstract class MovieModel {
   Future<GetMovieDetailsCreditsResponse?> getMovieDetailsCredits(int id);
 
   /// Database
-  Future<List<MovieVO>> getNowPlayingMoviesFromDatabase();
-  Future<List<MovieVO>> getPopularMoviesFromDatabase();
-  Future<List<MovieVO>> getTopRelatedMoviesFromDatabase();
+  Stream<List<MovieVO>> getNowPlayingMoviesFromDatabase();
+  Stream<List<MovieVO>> getPopularMoviesFromDatabase();
+  Stream<List<MovieVO>> getTopRelatedMoviesFromDatabase();
   Future<List<GenreVO>> getMovieGenresFromDatabase();
   Future<List<GenreVO?>> getMovieGenresByIdsFromDatabase(List<int> ids);
   Future<List<ActorVO>> getActorsFromDatabase();

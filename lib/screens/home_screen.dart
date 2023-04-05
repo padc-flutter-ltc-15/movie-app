@@ -37,38 +37,21 @@ class _HomeScreenState extends State<HomeScreen> {
   /// Because it will not refresh every time Widget is refreshed
   @override
   void initState() {
-    /*movieModel.getNowPlayingMovies(1)
-    .then((value) {
-      setState(() {
-        nowPlayingMovieList = value;
-      });
-    })
-    .catchError((error) {
-      debugPrint(error.toString());
-    });*/
 
-    movieModel.getNowPlayingMoviesFromDatabase()
-    .then((value) {
+    movieModel.getNowPlayingMoviesFromDatabase().listen((event) {
       setState(() {
-        nowPlayingMovieList = value;
+        nowPlayingMovieList = event;
       });
+    }).onError((error) {
+      debugPrint(error.toString());
     });
-    
-    /*movieModel.getPopularMovies(1)
-    .then((value) {
-      setState(() {
-        popularMovieList = value;
-      });
-    })
-    .catchError((error) {
-      debugPrint(error.toString());
-    });*/
 
-    movieModel.getPopularMoviesFromDatabase()
-        .then((value) {
+    movieModel.getPopularMoviesFromDatabase().listen((event) {
       setState(() {
-        popularMovieList = value;
+        popularMovieList = event;
       });
+    }).onError((error) {
+      debugPrint(error.toString());
     });
 
     movieModel.getMovieGenres()
@@ -92,21 +75,12 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     });
 
-    /*movieModel.getTopRelatedMovies(1)
-        .then((value) {
+    movieModel.getTopRelatedMoviesFromDatabase().listen((event) {
       setState(() {
-        topRatedMovieList = value;
+        topRatedMovieList = event;
       });
-    })
-        .catchError((error) {
+    }).onError((error) {
       debugPrint(error.toString());
-    });*/
-
-    movieModel.getTopRelatedMoviesFromDatabase()
-        .then((value) {
-      setState(() {
-        topRatedMovieList = value;
-      });
     });
 
     movieModel.getActors()

@@ -17,37 +17,39 @@ class MovieDao {
 
   }
 
-  /// Reactive Programming
-
   Stream<void> getAllMoviesEventStream() {
     return getMovieBox().watch();
   }
 
-  Stream<List<MovieVO>> getNowPlayingMoviesStream() {
-    return Stream.value(
-        getAllMovies()
-        .where((movie) => movie.isNowPlaying??false)
-        .toList()
-    );
+  List<MovieVO> getNowPlayingMoviesStream() {
+    if(getAllMovies() != null && getAllMovies().isNotEmpty??false) {
+      return getAllMovies()
+          .where((movie) => movie.isNowPlaying ?? false)
+          .toList();
+    } else {
+      return [];
+    }
   }
 
-  Stream<List<MovieVO>> getTopRatedMoviesStream() {
-    return Stream.value(
-        getAllMovies()
-        .where((movie) => movie.isTopRated??false)
-        .toList()
-    );
+  List<MovieVO> getTopRatedMoviesStream() {
+    if(getAllMovies() != null && getAllMovies().isNotEmpty??false) {
+      return getAllMovies()
+          .where((movie) => movie.isTopRated ?? false)
+          .toList();
+    } else {
+      return [];
+    }
   }
 
-  Stream<List<MovieVO>> getPopularMoviesStream() {
-    return Stream.value(
-        getAllMovies()
-        .where((movie) => movie.isPopular??false)
-        .toList()
-    );
+  List<MovieVO> getPopularMoviesStream() {
+    if(getAllMovies() != null && getAllMovies().isNotEmpty??false) {
+      return getAllMovies()
+          .where((movie) => movie.isPopular ?? false)
+          .toList();
+    } else {
+      return [];
+    }
   }
-
-  /// Reactive Programming
 
   void saveMovie(MovieVO movie) async {
     await getMovieBox().put(movie.id, movie);
