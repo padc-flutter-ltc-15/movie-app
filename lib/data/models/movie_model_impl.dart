@@ -168,8 +168,8 @@ class MovieModelImpl extends MovieModel {
 
     return movieDao
         .getAllMoviesEventStream()
-        .startWith(movieDao.getNowPlayingMoviesStream())
-        .map((event) => movieDao.getNowPlayingMoviesStream());
+        .startWith(movieDao.getNowPlayingMovies())
+        .map((event) => movieDao.getNowPlayingMovies());
   }
 
   @override
@@ -179,8 +179,8 @@ class MovieModelImpl extends MovieModel {
 
     return movieDao
         .getAllMoviesEventStream()
-        .startWith(movieDao.getPopularMoviesStream())
-        .map((event) => movieDao.getPopularMoviesStream());
+        .startWith(movieDao.getPopularMovies())
+        .map((event) => movieDao.getPopularMovies());
   }
 
   @override
@@ -190,7 +190,7 @@ class MovieModelImpl extends MovieModel {
 
     return movieDao
         .getAllMoviesEventStream()
-        .startWith(movieDao.getTopRatedMoviesStream())
-        .map((event) => movieDao.getTopRatedMoviesStream());
+        .startWith(movieDao.getTopRatedMovies())
+        .map((event) => movieDao.getTopRatedMovies());
   }
 }
