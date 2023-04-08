@@ -29,8 +29,8 @@ class ActorDao {
     await getActorBox().putAll(map);
   }
 
-  List<ActorVO> getAllActors() {
-    return getActorBox().values.toList();
+  Stream<List<ActorVO>> getAllActors() {
+    return Stream.value(getActorBox().values.toList());
   }
 
   Box<ActorVO> getActorBox() {

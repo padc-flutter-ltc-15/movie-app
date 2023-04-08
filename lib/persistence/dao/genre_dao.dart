@@ -45,8 +45,8 @@ class GenreDao {
     return filteredGenres;
   }
 
-  List<GenreVO> getAllGenres() {
-    return getGenreBox().values.toList();
+  Stream<List<GenreVO>> getAllGenres() {
+    return Stream.value(getGenreBox().values.toList());
   }
 
   Box<GenreVO> getGenreBox() {

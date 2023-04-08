@@ -21,33 +21,33 @@ class MovieDao {
     return getMovieBox().watch();
   }
 
-  List<MovieVO> getNowPlayingMovies() {
+  Stream<List<MovieVO>> getNowPlayingMovies() {
     if(getAllMovies() != null && getAllMovies().isNotEmpty??false) {
-      return getAllMovies()
+      return Stream.value(getAllMovies()
           .where((movie) => movie.isNowPlaying ?? false)
-          .toList();
+          .toList());
     } else {
-      return [];
+      return Stream.value([]);
     }
   }
 
-  List<MovieVO> getTopRelatedMovies() {
+  Stream<List<MovieVO>> getTopRelatedMovies() {
     if(getAllMovies() != null && getAllMovies().isNotEmpty??false) {
-      return getAllMovies()
+      return Stream.value(getAllMovies()
           .where((movie) => movie.isTopRated ?? false)
-          .toList();
+          .toList());
     } else {
-      return [];
+      return Stream.value([]);
     }
   }
 
-  List<MovieVO> getPopularMovies() {
+  Stream<List<MovieVO>> getPopularMovies() {
     if(getAllMovies() != null && getAllMovies().isNotEmpty??false) {
-      return getAllMovies()
+      return Stream.value(getAllMovies()
           .where((movie) => movie.isPopular ?? false)
-          .toList();
+          .toList());
     } else {
-      return [];
+      return Stream.value([]);
     }
   }
 

@@ -33,10 +33,6 @@ class MovieModelImpl extends MovieModel {
     getTopRelatedMoviesFromDatabase();
     getMovieGenresFromDatabase();
     getActorsFromDatabase();
-
-    getNowPlayingMovies(1);
-    getPopularMovies(1);
-    get
   }
 
   /// factory constructor
@@ -156,7 +152,7 @@ class MovieModelImpl extends MovieModel {
     movieDao
         .getAllMoviesEventStream()
         .startWith(movieDao.getNowPlayingMovies())
-        .combineLatest(movieDao.getNowPlayingMovies() as Stream<Object?>, (event, movies) => movies as List<MovieVO>)
+        .combineLatest(movieDao.getNowPlayingMovies(), (event, movies) => movies)
         .first
         .then((movies) {
           this.nowPlayingMovieList = movies;
@@ -172,7 +168,7 @@ class MovieModelImpl extends MovieModel {
     movieDao
         .getAllMoviesEventStream()
         .startWith(movieDao.getPopularMovies())
-        .combineLatest(movieDao.getPopularMovies() as Stream<Object?>, (event, movies) => movies as List<MovieVO>)
+        .combineLatest(movieDao.getPopularMovies(), (event, movies) => movies)
         .first
         .then((movies) {
           this.popularMovieList = movies;
@@ -188,7 +184,7 @@ class MovieModelImpl extends MovieModel {
     movieDao
         .getAllMoviesEventStream()
         .startWith(movieDao.getTopRelatedMovies())
-        .combineLatest(movieDao.getTopRelatedMovies() as Stream<Object?>, (event, movies) => movies as List<MovieVO>)
+        .combineLatest(movieDao.getTopRelatedMovies(), (event, movies) => movies)
         .first
         .then((movies) {
           this.topRatedMovieList = movies;
@@ -216,7 +212,7 @@ class MovieModelImpl extends MovieModel {
     actorDao
         .getAllActorsEventStream()
         .startWith(actorDao.getAllActors())
-        .combineLatest(actorDao.getAllActors() as Stream<Object?>, (event, actors) => actors as List<ActorVO>)
+        .combineLatest(actorDao.getAllActors(), (event, actors) => actors)
         .first
         .then((actors) {
           this.actorList = actors;
@@ -242,11 +238,13 @@ class MovieModelImpl extends MovieModel {
     genreDao
         .getAllGenresEventStream()
         .startWith(genreDao.getAllGenres())
-        .combineLatest(genreDao.getAllGenres() as Stream<Object?>, (event, genres) => genres as List<GenreVO>)
+        .combineLatest(genreDao.getAllGenres(), (event, genres) => genres)
         .first
         .then((genres) {
           this.genreList = genres;
           notifyListeners();
+
+          getMoviesByGenre(genres[0].id);
         });
   }
 }
