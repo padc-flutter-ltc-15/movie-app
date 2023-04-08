@@ -16,7 +16,11 @@ class ActorDao {
 
   }
 
-  void saveAllGenres(List<ActorVO> list) async {
+  Stream<void> getAllActorsEventStream() {
+    return getActorBox().watch();
+  }
+
+  void saveAllActors(List<ActorVO> list) async {
     Map<int, ActorVO> map = Map.fromIterable(list,
         key: (actor) => actor.id,
         value: (actor) => actor

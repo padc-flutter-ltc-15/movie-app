@@ -17,6 +17,10 @@ class GenreDao {
 
   }
 
+  Stream<void> getAllGenresEventStream() {
+    return getGenreBox().watch();
+  }
+
   void saveAllGenres(List<GenreVO> list) async {
     Map<int, GenreVO> map = Map.fromIterable(list,
       key: (genre) => genre.id,
@@ -26,7 +30,7 @@ class GenreDao {
     await getGenreBox().putAll(map);
   }
 
-  List<GenreVO>? getGenresByIds(List<int> ids) {
+  List<GenreVO> getGenresByIds(List<int> ids) {
     List<GenreVO> allGenres = getGenreBox().values.toList();
     List<GenreVO> filteredGenres = List.empty(growable: true);
 

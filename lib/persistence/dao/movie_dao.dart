@@ -31,7 +31,7 @@ class MovieDao {
     }
   }
 
-  List<MovieVO> getTopRatedMovies() {
+  List<MovieVO> getTopRelatedMovies() {
     if(getAllMovies() != null && getAllMovies().isNotEmpty??false) {
       return getAllMovies()
           .where((movie) => movie.isTopRated ?? false)

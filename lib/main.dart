@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:themovieapp/data/models/movie_model_impl.dart';
 import 'package:themovieapp/data/vos/actor_vo.dart';
 import 'package:themovieapp/data/vos/date_vo.dart';
 import 'package:themovieapp/data/vos/genre_vo.dart';
 import 'package:themovieapp/data/vos/movie_vo.dart';
-import 'package:themovieapp/network/dataagents/dio_movie_data_agent_impl.dart';
-import 'package:themovieapp/network/dataagents/http_movie_data_agent_impl.dart';
 import 'package:themovieapp/network/dataagents/retrofit_movie_data_agent_impl.dart';
 import 'package:themovieapp/persistence/hive_constants.dart';
 import 'package:themovieapp/screens/detail_screen.dart';
@@ -33,13 +33,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return ScopedModel(
+      model: MovieModelImpl(),
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: HomeScreen(),
       ),
-      home: HomeScreen(),
     );
   }
 }

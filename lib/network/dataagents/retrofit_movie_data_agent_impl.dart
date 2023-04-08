@@ -30,18 +30,18 @@ class RetrofitMovieDataAgentImpl extends MovieDataAgent {
   }
 
   @override
-  Future<List<MovieVO>?> getNowPlayingMovies(int page) {
+  Future<List<MovieVO>> getNowPlayingMovies(int page) {
     return movieApi.getNowPlayingMovies(API_KEY, LANGUAGE_EN_US, page.toString())
         .asStream()
-        .map((response) => response.results)
+        .map((response) => response.results??[])
         .first;
   }
 
   @override
-  Future<List<ActorVO>?> getActors(int page) {
+  Future<List<ActorVO>> getActors(int page) {
     return movieApi.getActors(API_KEY, LANGUAGE_EN_US, page.toString())
         .asStream()
-        .map((response) => response.results)
+        .map((response) => response.results??[])
         .first;
   }
 
@@ -54,34 +54,34 @@ class RetrofitMovieDataAgentImpl extends MovieDataAgent {
   }
 
   @override
-  Future<List<GenreVO>?> getMovieGenres(int page) {
+  Future<List<GenreVO>> getMovieGenres(int page) {
     return movieApi.getMovieGenres(API_KEY, LANGUAGE_EN_US)
         .asStream()
-        .map((response) => response.genres)
+        .map((response) => response.genres??[])
         .first;
   }
 
   @override
-  Future<List<MovieVO>?> getMoviesByGenre(int page, int genreId) {
+  Future<List<MovieVO>> getMoviesByGenre(int page, int genreId) {
     return movieApi.getMoviesByGenre(API_KEY, LANGUAGE_EN_US, page.toString(), genreId)
         .asStream()
-        .map((response) => response.results)
+        .map((response) => response.results??[])
         .first;
   }
 
   @override
-  Future<List<MovieVO>?> getPopularMovies(int page) {
+  Future<List<MovieVO>> getPopularMovies(int page) {
     return movieApi.getPopularMovies(API_KEY, LANGUAGE_EN_US, page.toString())
         .asStream()
-        .map((response) => response.results)
+        .map((response) => response.results??[])
         .first;
   }
 
   @override
-  Future<List<MovieVO>?> getTopRelatedMovies(int page) {
+  Future<List<MovieVO>> getTopRelatedMovies(int page) {
     return movieApi.getTopRelatedMovies(API_KEY, LANGUAGE_EN_US, page.toString())
         .asStream()
-        .map((response) => response.results)
+        .map((response) => response.results??[])
         .first;
   }
 
