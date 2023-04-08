@@ -30,7 +30,7 @@ class GenreDao {
     await getGenreBox().putAll(map);
   }
 
-  List<GenreVO> getGenresByIds(List<int> ids) {
+  Stream<List<GenreVO>> getGenresByIds(List<int> ids) {
     List<GenreVO> allGenres = getGenreBox().values.toList();
     List<GenreVO> filteredGenres = List.empty(growable: true);
 
@@ -42,7 +42,7 @@ class GenreDao {
       }
     }
 
-    return filteredGenres;
+    return Stream.value(filteredGenres);
   }
 
   Stream<List<GenreVO>> getAllGenres() {

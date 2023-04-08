@@ -17,6 +17,11 @@ abstract class MovieModel extends Model {
   List<MovieVO> topRatedMovieList = [];
   List<ActorVO> actorList = [];
 
+  List<ActorVO> castsList = [];
+  List<ActorVO> crewList = [];
+  MovieVO? movieDetail = null;
+  List<GenreVO> movieDetailGenreList = [];
+
   /// Network
   void getNowPlayingMovies(int page);
   void getPopularMovies(int page);
@@ -24,15 +29,15 @@ abstract class MovieModel extends Model {
   void getMovieGenres();
   void getMoviesByGenre(int genreId);
   void getActors();
-  Future<MovieVO?> getMovieDetails(int id);
-  Future<GetMovieDetailsCreditsResponse?> getMovieDetailsCredits(int id);
+  void getMovieDetails(int id);
+  void getMovieDetailsCredits(int id);
 
   /// Database
   void getNowPlayingMoviesFromDatabase();
   void getPopularMoviesFromDatabase();
   void getTopRelatedMoviesFromDatabase();
   void getMovieGenresFromDatabase();
-  Future<List<GenreVO>> getMovieGenresByIdsFromDatabase(List<int> ids);
+  void getMovieGenresByIdsFromDatabase(List<int> ids);
   void getActorsFromDatabase();
-  Future<MovieVO> getMovieDetailsFromDatabase(int id);
+  void getMovieDetailsFromDatabase(int id);
 }

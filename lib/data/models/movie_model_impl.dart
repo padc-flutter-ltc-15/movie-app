@@ -121,26 +121,35 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  Future<List<ActorVO>> getActors() {
-    return _movieDataAgent.getActors(1).then((actors) async {
+  void getActors() {
+    _movieDataAgent.getActors(1).then((actors) async {
       actorDao.saveAllActors(actors);
 
       this.actorList = actors;
 
       notifyListeners();
-
-      return Future.value(actors);
     });
   }
 
   @override
-  Future<MovieVO?> getMovieDetails(int id) {
-    return _movieDataAgent.getMovieDetails(id);
+  void getMovieDetails(int id) {
+    _movieDataAgent.getMovieDetails(id).then((movieDetail) {
+      this.movieDetail = movieDetail;
+
+      getMovieGenresByIdsFromDatabase(this.movieDetail?.genreIds??[]);
+
+      notifyListeners();
+    });
   }
 
   @override
-  Future<GetMovieDetailsCreditsResponse?> getMovieDetailsCredits(int id) {
-    return _movieDataAgent.getMovieDetailsCredits(id);
+  void getMovieDetailsCredits(int id) {
+    _movieDataAgent.getMovieDetailsCredits(id).then((response) {
+      this.crewList = response.crew??[];
+      this.castsList = response.cast??[];
+
+      notifyListeners();
+    });
   }
 
   /// Database
@@ -156,6 +165,7 @@ class MovieModelImpl extends MovieModel {
         .first
         .then((movies) {
           this.nowPlayingMovieList = movies;
+
           notifyListeners();
         });
   }
@@ -172,6 +182,7 @@ class MovieModelImpl extends MovieModel {
         .first
         .then((movies) {
           this.popularMovieList = movies;
+
           notifyListeners();
         });
   }
@@ -188,21 +199,23 @@ class MovieModelImpl extends MovieModel {
         .first
         .then((movies) {
           this.topRatedMovieList = movies;
+
           notifyListeners();
         });
   }
 
   @override
-  Future<List<GenreVO>> getMovieGenresByIdsFromDatabase(List<int> ids) {
-    var genres = genreDao
-        .getGenresByIds(ids)
-        .toList();
+  void getMovieGenresByIdsFromDatabase(List<int> ids) {
+    genreDao
+        .getAllGenresEventStream()
+        .startWith(genreDao.getGenresByIds(ids))
+        .combineLatest(genreDao.getGenresByIds(ids), (event, genres) => genres)
+        .first
+        .then((genres) {
+          this.movieDetailGenreList = genres;
 
-    debugPrint("genres: " + genres.toString());
-
-    return Future.value(
-        genres
-    );
+          notifyListeners();
+        });
   }
 
   @override
@@ -216,19 +229,14 @@ class MovieModelImpl extends MovieModel {
         .first
         .then((actors) {
           this.actorList = actors;
+
           notifyListeners();
         });
   }
 
   @override
-  Future<MovieVO> getMovieDetailsFromDatabase(int id) {
-    var movie = movieDao.getMovieById(id);
-
-    debugPrint("movie: " + movie.toString());
-
-    return Future.value(
-      movie
-    );
+  void getMovieDetailsFromDatabase(int id) {
+    getMovieDetails(id);
   }
 
   @override

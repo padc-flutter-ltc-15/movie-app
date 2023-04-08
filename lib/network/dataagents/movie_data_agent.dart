@@ -13,6 +13,6 @@ abstract class MovieDataAgent {
   Future<List<GenreVO>> getMovieGenres(int page);
   Future<List<MovieVO>> getMoviesByGenre(int page, int genreId);
   Future<List<ActorVO>> getActors(int page);
-  Future<MovieVO?> getMovieDetails(int id);
-  Future<GetMovieDetailsCreditsResponse?> getMovieDetailsCredits(int id);
+  Future<MovieVO> getMovieDetails(int id);
+  Future<GetMovieDetailsCreditsResponse> getMovieDetailsCredits(int id);
 }
