@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:themovieapp/bloc/detail_bloc.dart';
 import 'package:themovieapp/data/vos/genre_vo.dart';
 import 'package:themovieapp/data/vos/movie_vo.dart';
 import 'package:themovieapp/network/api_constants.dart';
@@ -13,6 +14,7 @@ import 'package:themovieapp/widgets/title_text.dart';
 
 import '../data/models/movie_model.dart';
 import '../data/models/movie_model_impl.dart';
+import '../data/vos/actor_vo.dart';
 import '../views/actors_and_creators_view.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -26,136 +28,129 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
 
-  MovieModel movieModel = MovieModelImpl();
-
-  MovieVO? movie;
-  List<GenreVO>? genres;
-  GetMovieDetailsCreditsResponse? movieDetailsCreditsResponse;
+  late DetailBloc _bloc;
 
   @override
   void initState() {
-    movieModel.getMovieDetails(widget.id)
-        .then((value) {
-      setState(() {
-        movie = value;
-      });
-    })
-        .catchError((error) {
-      debugPrint(error.toString());
-    });
-
-    movieModel.getMovieDetailsFromDatabase(widget.id)
-    .then((value) {
-      setState(() {
-        movie = value;
-
-        movieModel.getMovieGenresByIdsFromDatabase(movie?.genreIds??[])
-            .then((value) {
-          genres = (value??[]).cast<GenreVO>();
-        });
-      });
-    });
-
-    movieModel.getMovieDetailsCredits(widget.id)
-        .then((value) {
-      setState(() {
-        movieDetailsCreditsResponse = value;
-      });
-    })
-        .catchError((error) {
-      debugPrint(error.toString());
-    });
-
     super.initState();
+
+    _bloc = DetailBloc(widget.id);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _bloc.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: HOME_SCREEN_BG_COLOR,
-        child: CustomScrollView(
-          slivers: [
-            MovieDetailSliverAppBarView(
-              onTapBack: () {
-                Navigator.pop(context);
-              },
-              movie: movie,
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_2X),
-                    child: Column(
-                      children: [
-                        TrailerSection(
-                          genreList: genres??[],
-                        ),
-                        SizedBox(
-                          height: MARGIN_MEDIUM,
-                        ),
-                        StoryLineView(
-                          text: movie?.overview??"",
+      body: StreamBuilder(
+        stream: _bloc.movieDetailStreamController.stream,
+        builder: (BuildContext context, AsyncSnapshot<MovieVO> detailSnapshot) {
+          return Container(
+            color: HOME_SCREEN_BG_COLOR,
+            child: CustomScrollView(
+              slivers: [
+                MovieDetailSliverAppBarView(
+                  onTapBack: () {
+                    Navigator.pop(context);
+                  },
+                  movie: detailSnapshot.data,
+                ),
+                SliverList(
+                  delegate: SliverChildListDelegate(
+                      [
+                        Container(
+                          margin: EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_2X),
+                          child: Column(
+                            children: [
+                              StreamBuilder(
+                                stream: _bloc.genresStreamController.stream,
+                                builder: (BuildContext context, AsyncSnapshot<List<GenreVO>> genreSnapshot) {
+                                  return TrailerSection(
+                                    genreList: genreSnapshot.data??[],
+                                  );
+                                },
+                              ),
+                              SizedBox(
+                                height: MARGIN_MEDIUM,
+                              ),
+                              StoryLineView(
+                                text: detailSnapshot.data?.overview??"",
+                              ),
+                              SizedBox(
+                                height: MARGIN_MEDIUM_2X,
+                              ),
+                              Row(
+                                children: [
+                                  MovieDetailScreenButtonView(
+                                    title: "Play Trailer",
+                                    icon: Icons.play_circle_fill,
+                                    iconColor: Colors.black54,
+                                    backgroundColor: Colors.amber,
+                                    isGhostButton: false,
+                                  ),
+                                  SizedBox(
+                                    width: MARGIN_MEDIUM,
+                                  ),
+                                  MovieDetailScreenButtonView(
+                                    title: "Rate Movie",
+                                    icon: Icons.star,
+                                    iconColor: Colors.amber,
+                                    backgroundColor: HOME_SCREEN_BG_COLOR,
+                                    isGhostButton: true,
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                         SizedBox(
                           height: MARGIN_MEDIUM_2X,
                         ),
-                        Row(
-                          children: [
-                            MovieDetailScreenButtonView(
-                              title: "Play Trailer",
-                              icon: Icons.play_circle_fill,
-                              iconColor: Colors.black54,
-                              backgroundColor: Colors.amber,
-                              isGhostButton: false,
-                            ),
-                            SizedBox(
-                              width: MARGIN_MEDIUM,
-                            ),
-                            MovieDetailScreenButtonView(
-                              title: "Rate Movie",
-                              icon: Icons.star,
-                              iconColor: Colors.amber,
-                              backgroundColor: HOME_SCREEN_BG_COLOR,
-                              isGhostButton: true,
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
+                        StreamBuilder(
+                          stream: _bloc.actorsStreamController.stream,
+                          builder: (BuildContext context, AsyncSnapshot<List<ActorVO>> actorSnapshot) {
+                            return ActorsAndCreatorsSection(
+                              title: MAIN_SCREEN_BEST_ACTORS,
+                              seeMore: MAIN_SCREEN_SEE_MORE_ACTORS,
+                              seeMoreVisibility: false,
+                              actorList: actorSnapshot.data??[],
+                            );
+                          },
+                        ),
+                        SizedBox(
+                          height: MARGIN_LARGE,
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_2X),
+                          child: AboutFilmSection(
+                            movie: detailSnapshot.data,
+                          ),
+                        ),
+                        SizedBox(
+                          height: MARGIN_MEDIUM_2X,
+                        ),
+                        StreamBuilder(
+                          stream: _bloc.creatorsStreamController.stream,
+                          builder: (BuildContext context, AsyncSnapshot<List<ActorVO>> actorSnapshot) {
+                            return ActorsAndCreatorsSection(
+                              title: MAIN_SCREEN_CREATORS,
+                              seeMore: MAIN_SCREEN_SEE_MORE_CREATORS,
+                              actorList: actorSnapshot.data??[],
+                            );
+                          },
+                        ),
+                      ]
                   ),
-                  SizedBox(
-                    height: MARGIN_MEDIUM_2X,
-                  ),
-                  ActorsAndCreatorsSection(
-                    title: MAIN_SCREEN_BEST_ACTORS,
-                    seeMore: MAIN_SCREEN_SEE_MORE_ACTORS,
-                    seeMoreVisibility: false,
-                    actorList: movieDetailsCreditsResponse?.cast??[],
-                  ),
-                  SizedBox(
-                    height: MARGIN_LARGE,
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_2X),
-                    child: AboutFilmSection(
-                      movie: movie,
-                    ),
-                  ),
-                  SizedBox(
-                    height: MARGIN_MEDIUM_2X,
-                  ),
-                  ActorsAndCreatorsSection(
-                    title: MAIN_SCREEN_CREATORS,
-                    seeMore: MAIN_SCREEN_SEE_MORE_CREATORS,
-                    actorList: movieDetailsCreditsResponse?.crew??[],
-                  ),
-                ]
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
