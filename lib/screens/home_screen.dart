@@ -5,6 +5,7 @@ import 'package:themovieapp/data/models/movie_model.dart';
 import 'package:themovieapp/data/models/movie_model_impl.dart';
 import 'package:themovieapp/data/vos/actor_vo.dart';
 import 'package:themovieapp/data/vos/genre_vo.dart';
+import 'package:themovieapp/data/vos/movie_vo.dart';
 import 'package:themovieapp/resources/colors.dart';
 import 'package:themovieapp/resources/dimens.dart';
 import 'package:themovieapp/resources/strings.dart';
@@ -51,21 +52,23 @@ class HomeScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Consumer<HomeBloc>(
-                  builder: (context, bloc, child) {
+                Selector<HomeBloc, List<MovieVO>>(
+                  selector: (context, bloc) => bloc.nowPlayingMovies,
+                  builder: (context, value, child) {
                     return BannerSection(
-                      movieList: bloc.nowPlayingMovies.take(5).toList(),
+                      movieList: value.take(5).toList(),
                     );
                   },
                 ), /// Banner
                 SizedBox(
                   height: MARGIN_MEDIUM_2X,
                 ),
-                Consumer<HomeBloc>(
-                  builder: (context, bloc, child) {
+                Selector<HomeBloc, List<MovieVO>>(
+                  selector: (context, bloc) => bloc.popularMovies,
+                  builder: (context, value, child) {
                     return BestPopularMoviesAndSeriesSection(
                       onTapMovie: (int id) => _navigateToDetailScreen(context, id),
-                      movieList: bloc.popularMovies,
+                      movieList: value,
                     );
                   },
                 ),
@@ -73,14 +76,21 @@ class HomeScreen extends StatelessWidget {
                   height: MARGIN_MEDIUM_2X,
                 ),
                 CheckMovieShowTimeSection(),
-                Consumer<HomeBloc>(
-                  builder: (context, bloc, child) {
-                    return GenreSection(
-                      genreList: bloc.genres,
-                      movieList: bloc.moviesByGenre,
-                      onTabMovie: (int id) => _navigateToDetailScreen(context, id),
-                      onTabGenre: (id) {
-                        bloc.getMoviesByGenre(id);
+                Selector<HomeBloc, List<GenreVO>>(
+                  selector: (context, bloc) => bloc.genres,
+                  builder: (context, genresValue, child) {
+                    return Selector<HomeBloc, List<MovieVO>>(
+                      selector: (context, bloc) => bloc.moviesByGenre,
+                      builder: (context, moviesByGenreValue, child) {
+                        return GenreSection(
+                          genreList: genresValue,
+                          movieList: moviesByGenreValue,
+                          onTabMovie: (int id) => _navigateToDetailScreen(context, id),
+                          onTabGenre: (id) {
+                            var homeBloc = Provider.of<HomeBloc>(context, listen: false);
+                            homeBloc.getMoviesByGenre(id);
+                          },
+                        );
                       },
                     );
                   },
@@ -88,23 +98,25 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(
                   height: MARGIN_MEDIUM_2X,
                 ),
-                Consumer<HomeBloc>(
-                  builder: (context, bloc, child) {
+                Selector<HomeBloc, List<MovieVO>>(
+                  selector: (context, bloc) => bloc.showcaseMovies,
+                  builder: (context, value, child) {
                     return ShowCasesSection(
-                      movieList: bloc.showcaseMovies,
+                      movieList: value,
                     );
-                  }
+                  },
                 ),
                 SizedBox(
                   height: MARGIN_MEDIUM_2X,
                 ),
-                Consumer<HomeBloc>(
-                  builder: (context, bloc, child) {
+                Selector<HomeBloc, List<ActorVO>>(
+                  selector: (context, bloc) => bloc.actors,
+                  builder: (context, value, child) {
                     return ActorsAndCreatorsSection(
                       title: MAIN_SCREEN_BEST_ACTORS,
                       seeMore: MAIN_SCREEN_SEE_MORE_ACTORS,
                       seeMoreVisibility: true,
-                      actorList: bloc.actors,
+                      actorList: value,
                     );
                   },
                 ),
