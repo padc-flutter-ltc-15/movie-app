@@ -10,8 +10,8 @@ import '../vos/movie_vo.dart';
 abstract class MovieModel extends Model {
 
   /// State
-  List<MovieVO> nowPlayingMovieList = [];
   List<MovieVO> popularMovieList = [];
+  List<MovieVO> nowPlayingMovieList = [];
   List<GenreVO> genreList = [];
   List<MovieVO> movieByGenreList = [];
   List<MovieVO> topRatedMovieList = [];

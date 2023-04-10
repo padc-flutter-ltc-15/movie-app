@@ -1,18 +1,12 @@
 
-import 'package:flutter/cupertino.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'package:themovieapp/data/models/movie_model.dart';
-import 'package:themovieapp/data/vos/actor_vo.dart';
-import 'package:themovieapp/data/vos/genre_vo.dart';
 import 'package:themovieapp/data/vos/movie_vo.dart';
 import 'package:themovieapp/network/dataagents/movie_data_agent.dart';
 import 'package:themovieapp/network/dataagents/retrofit_movie_data_agent_impl.dart';
-import 'package:themovieapp/network/responses/get_movie_details_response.dart';
 import 'package:themovieapp/persistence/dao/actor_dao.dart';
 import 'package:themovieapp/persistence/dao/genre_dao.dart';
 import 'package:themovieapp/persistence/dao/movie_dao.dart';
-
-import '../../network/responses/get_movie_details_credits_response.dart';
 
 class MovieModelImpl extends MovieModel {
 
@@ -28,8 +22,8 @@ class MovieModelImpl extends MovieModel {
 
   /// private constructor
   MovieModelImpl._internal() {
-    getNowPlayingMoviesFromDatabase();
     getPopularMoviesFromDatabase();
+    getNowPlayingMoviesFromDatabase();
     getTopRelatedMoviesFromDatabase();
     getMovieGenresFromDatabase();
     getActorsFromDatabase();
@@ -101,6 +95,8 @@ class MovieModelImpl extends MovieModel {
   @override
   void getMovieGenres() {
     _movieDataAgent.getMovieGenres(1).then((genres) async {
+      getMoviesByGenre(genres.first.id);
+
       genreDao.saveAllGenres(genres);
 
       this.genreList = genres;
@@ -160,10 +156,9 @@ class MovieModelImpl extends MovieModel {
 
     movieDao
         .getAllMoviesEventStream()
-        .startWith(movieDao.getNowPlayingMovies())
-        .combineLatest(movieDao.getNowPlayingMovies(), (event, movies) => movies)
-        .first
-        .then((movies) {
+        .startWith(movieDao.getNowPlayingMoviesStream())
+        .map((event) => movieDao.getNowPlayingMovies())
+        .listen((movies) {
           this.nowPlayingMovieList = movies;
 
           notifyListeners();
@@ -177,10 +172,9 @@ class MovieModelImpl extends MovieModel {
 
     movieDao
         .getAllMoviesEventStream()
-        .startWith(movieDao.getPopularMovies())
-        .combineLatest(movieDao.getPopularMovies(), (event, movies) => movies)
-        .first
-        .then((movies) {
+        .startWith(movieDao.getPopularMoviesStream())
+        .map((event) => movieDao.getPopularMovies())
+        .listen((movies) {
           this.popularMovieList = movies;
 
           notifyListeners();
@@ -194,10 +188,9 @@ class MovieModelImpl extends MovieModel {
 
     movieDao
         .getAllMoviesEventStream()
-        .startWith(movieDao.getTopRelatedMovies())
-        .combineLatest(movieDao.getTopRelatedMovies(), (event, movies) => movies)
-        .first
-        .then((movies) {
+        .startWith(movieDao.getTopRatedMoviesStream())
+        .map((event) => movieDao.getTopRatedMovies())
+        .listen((movies) {
           this.topRatedMovieList = movies;
 
           notifyListeners();
@@ -208,10 +201,9 @@ class MovieModelImpl extends MovieModel {
   void getMovieGenresByIdsFromDatabase(List<int> ids) {
     genreDao
         .getAllGenresEventStream()
-        .startWith(genreDao.getGenresByIds(ids))
-        .combineLatest(genreDao.getGenresByIds(ids), (event, genres) => genres)
-        .first
-        .then((genres) {
+        .startWith(genreDao.getGenresByIdsStream(ids))
+        .map((event) => genreDao.getGenresByIds(ids))
+        .listen((genres) {
           this.movieDetailGenreList = genres;
 
           notifyListeners();
@@ -224,10 +216,9 @@ class MovieModelImpl extends MovieModel {
 
     actorDao
         .getAllActorsEventStream()
-        .startWith(actorDao.getAllActors())
-        .combineLatest(actorDao.getAllActors(), (event, actors) => actors)
-        .first
-        .then((actors) {
+        .startWith(actorDao.getAllActorsStream())
+        .map((event) => actorDao.getAllActors())
+        .listen((actors) {
           this.actorList = actors;
 
           notifyListeners();
@@ -245,14 +236,12 @@ class MovieModelImpl extends MovieModel {
 
     genreDao
         .getAllGenresEventStream()
-        .startWith(genreDao.getAllGenres())
-        .combineLatest(genreDao.getAllGenres(), (event, genres) => genres)
-        .first
-        .then((genres) {
+        .startWith(genreDao.getAllGenresStream())
+        .map((event) => genreDao.getAllGenres())
+        .listen((genres) {
           this.genreList = genres;
-          notifyListeners();
 
-          getMoviesByGenre(genres[0].id);
+          notifyListeners();
         });
   }
 }

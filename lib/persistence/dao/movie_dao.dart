@@ -1,7 +1,5 @@
 
-
 import 'package:hive/hive.dart';
-import 'package:themovieapp/data/vos/actor_vo.dart';
 import 'package:themovieapp/data/vos/movie_vo.dart';
 import 'package:themovieapp/persistence/hive_constants.dart';
 
@@ -21,34 +19,20 @@ class MovieDao {
     return getMovieBox().watch();
   }
 
-  Stream<List<MovieVO>> getNowPlayingMovies() {
-    if(getAllMovies() != null && getAllMovies().isNotEmpty??false) {
-      return Stream.value(getAllMovies()
-          .where((movie) => movie.isNowPlaying ?? false)
-          .toList());
-    } else {
-      return Stream.value([]);
-    }
+  Stream<List<MovieVO>> getNowPlayingMoviesStream() {
+    return Stream.value(getAllMovies()
+        .where((element) => element.isNowPlaying ?? false)
+        .toList());
   }
 
-  Stream<List<MovieVO>> getTopRelatedMovies() {
-    if(getAllMovies() != null && getAllMovies().isNotEmpty??false) {
-      return Stream.value(getAllMovies()
-          .where((movie) => movie.isTopRated ?? false)
-          .toList());
-    } else {
-      return Stream.value([]);
-    }
+  Stream<List<MovieVO>> getPopularMoviesStream() {
+    return Stream.value(
+        getAllMovies().where((element) => element.isPopular??true).toList());
   }
 
-  Stream<List<MovieVO>> getPopularMovies() {
-    if(getAllMovies() != null && getAllMovies().isNotEmpty??false) {
-      return Stream.value(getAllMovies()
-          .where((movie) => movie.isPopular ?? false)
-          .toList());
-    } else {
-      return Stream.value([]);
-    }
+  Stream<List<MovieVO>> getTopRatedMoviesStream() {
+    return Stream.value(
+        getAllMovies().where((element) => element.isTopRated ?? false).toList());
   }
 
   void saveMovie(MovieVO movie) async {
@@ -70,6 +54,36 @@ class MovieDao {
 
   List<MovieVO> getAllMovies() {
     return getMovieBox().values.toList();
+  }
+
+  List<MovieVO> getNowPlayingMovies() {
+    if (getAllMovies().isNotEmpty) {
+      return getAllMovies()
+          .where((element) => element.isNowPlaying ?? false)
+          .toList();
+    } else {
+      return [];
+    }
+  }
+
+  List<MovieVO> getPopularMovies() {
+    if (getAllMovies().isNotEmpty) {
+      return getAllMovies()
+          .where((element) => element.isPopular ?? true)
+          .toList();
+    } else {
+      return [];
+    }
+  }
+
+  List<MovieVO> getTopRatedMovies() {
+    if (getAllMovies().isNotEmpty) {
+      return getAllMovies()
+          .where((element) => element.isTopRated ?? false)
+          .toList();
+    } else {
+      return [];
+    }
   }
 
   Box<MovieVO> getMovieBox() {

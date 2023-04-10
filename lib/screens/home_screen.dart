@@ -55,11 +55,11 @@ class HomeScreen extends StatelessWidget {
               SizedBox(
                 height: MARGIN_MEDIUM_2X,
               ),
-              ScopedModelDescendant(
-                builder: (BuildContext context, Widget? child, MovieModelImpl model) {
+              ScopedModelDescendant<MovieModelImpl>(
+                builder: (context, child, model) {
                   return BestPopularMoviesAndSeriesSection(
                     onTapMovie: (int id) => _navigateToDetailScreen(context, id, model),
-                    movieList: model.nowPlayingMovieList,
+                    movieList: model.nowPlayingMovieList??[],
                   );
                 },
               ),
@@ -67,8 +67,8 @@ class HomeScreen extends StatelessWidget {
                 height: MARGIN_MEDIUM_2X,
               ),
               CheckMovieShowTimeSection(),
-              ScopedModelDescendant(
-                builder: (BuildContext context, Widget? child, MovieModelImpl model) {
+              ScopedModelDescendant<MovieModelImpl>(
+                builder: (context, child, model) {
                   return GenreSection(
                     genreList: model.genreList,
                     movieList: model.movieByGenreList,
@@ -82,8 +82,8 @@ class HomeScreen extends StatelessWidget {
               SizedBox(
                 height: MARGIN_MEDIUM_2X,
               ),
-              ScopedModelDescendant(
-                builder: (BuildContext context, Widget? child, MovieModelImpl model) {
+              ScopedModelDescendant<MovieModelImpl>(
+                builder: (context, child, model) {
                   return ShowCasesSection(
                     movieList: model.topRatedMovieList,
                   );
@@ -92,8 +92,8 @@ class HomeScreen extends StatelessWidget {
               SizedBox(
                 height: MARGIN_MEDIUM_2X,
               ),
-              ScopedModelDescendant(
-                builder: (BuildContext context, Widget? child, MovieModelImpl model) {
+              ScopedModelDescendant<MovieModelImpl>(
+                builder: (context, child, model) {
                   return ActorsAndCreatorsSection(
                     title: MAIN_SCREEN_BEST_ACTORS,
                     seeMore: MAIN_SCREEN_SEE_MORE_ACTORS,

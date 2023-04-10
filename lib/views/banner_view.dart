@@ -11,7 +11,7 @@ import '../widgets/gradient_view.dart';
 
 class BannerSection extends StatefulWidget {
 
-  final List<MovieVO> movieList;
+  final List<MovieVO>? movieList;
 
   const BannerSection({Key? key, required this.movieList}) : super(key: key);
 
@@ -21,7 +21,7 @@ class BannerSection extends StatefulWidget {
 
 class _BannerSectionState extends State<BannerSection> {
 
-  double _position = 0;
+  double _position = 0.0;
 
   @override
   Widget build(BuildContext context) {
@@ -35,28 +35,14 @@ class _BannerSectionState extends State<BannerSection> {
                 _position = page.toDouble();
               });
             },
-            /*children: [
-              BannerView(
-                url: "https://media.gq.com/photos/58b9fda8803bdb766dd69ef7/16:9/w_1280,c_limit/wolverine.jpg",
-                title: "The Wolverine",
-              ),
-              BannerView(
-                url: "https://imageio.forbes.com/specials-images/imageserve/60e463d022ee7d58f0049067/Hugh-Jackman-as-Wolverine/960x0.jpg?height=475&width=711&fit=bounds",
-                title: "Logan",),
-              BannerView(
-                url: "https://www.giantfreakinrobot.com/wp-content/uploads/2021/07/hugh-jackman-wolverine.jpg",
-                title: "X Men",
-              ),
-            ],*/
-            children: widget.movieList
-                .map((item) => BannerView(
+            children: widget.movieList?.map((item) => BannerView(
                 url: "$IMAGE_BASE_URL${item.posterPath}",
-                title: item.title))
-                .toList(),
+                title: item.title)
+            ).toList()??[],
           ),
         ),
         DotsIndicator(
-          dotsCount: widget.movieList.length,
+          dotsCount: widget.movieList?.length??1,
           position: _position,
           decorator: DotsDecorator(
             activeColor: HOME_SCREEN_BANNER_DOT_ACTIVE_COLOR,
