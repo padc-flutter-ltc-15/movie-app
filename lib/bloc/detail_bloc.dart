@@ -23,7 +23,7 @@ class DetailBloc extends ChangeNotifier {
       movieDetail = value;
       notifyListeners();
 
-      movieModel.getMovieGenresByIdsFromDatabase(value.genreIds).listen((value) {
+      movieModel.getMovieGenresByIdsFromDatabase(value.genreIds??[]).listen((value) {
         genres = value;
         notifyListeners();
       }).onError((error) {

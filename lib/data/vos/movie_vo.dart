@@ -55,46 +55,46 @@ part 'movie_vo.g.dart';
 class MovieVO {
   @JsonKey(name: "adult")
   @HiveField(0)
-  bool adult;
+  bool? adult;
   @JsonKey(name: "backdrop_path")
   @HiveField(1)
-  String backDropPath;
+  String? backDropPath;
   @JsonKey(name: "genre_ids")
   @HiveField(2)
-  List<int> genreIds;
+  List<int>? genreIds;
   @JsonKey(name: "id")
   @HiveField(3)
-  int id;
+  int? id;
   @JsonKey(name: "original_language")
   @HiveField(4)
-  String originalLanguage;
+  String? originalLanguage;
   @JsonKey(name: "original_title")
   @HiveField(5)
-  String originalTitle;
+  String? originalTitle;
   @JsonKey(name: "overview")
   @HiveField(6)
-  String overview;
+  String? overview;
   @JsonKey(name: "popularity")
   @HiveField(7)
-  double popularity;
+  double? popularity;
   @JsonKey(name: "poster_path")
   @HiveField(8)
-  String posterPath;
+  String? posterPath;
   @JsonKey(name: "release_date")
   @HiveField(9)
-  String releaseDate;
+  String? releaseDate;
   @JsonKey(name: "title")
   @HiveField(10)
   String title;
   @JsonKey(name: "video")
   @HiveField(11)
-  bool video;
+  bool? video;
   @JsonKey(name: "vote_average")
   @HiveField(12)
-  double voteAverage;
+  double? voteAverage;
   @JsonKey(name: "vote_count")
   @HiveField(13)
-  int voteCount;
+  int? voteCount;
 
   @HiveField(14)
   bool? isNowPlaying;
