@@ -51,7 +51,7 @@ class _BannerSectionState extends State<BannerSection> {
             children: widget.movieList
                 .map((item) => BannerView(
                 url: "$IMAGE_BASE_URL${item.posterPath}",
-                title: item.title))
+                title: item.title??""))
                 .toList(),
           ),
         ),

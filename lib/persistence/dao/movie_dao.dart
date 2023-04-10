@@ -69,7 +69,7 @@ class MovieDao {
   List<MovieVO> getPopularMovies() {
     if (getAllMovies().isNotEmpty) {
       return getAllMovies()
-          .where((element) => element.isPopular ?? true)
+          .where((element) => element.isPopular ?? false)
           .toList();
     } else {
       return [];

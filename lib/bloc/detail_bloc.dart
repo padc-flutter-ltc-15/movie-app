@@ -23,7 +23,7 @@ class DetailBloc {
     movieModel.getMovieDetailsFromDatabase(id).listen((value) {
       movieDetailStreamController.sink.add(value);
 
-      movieModel.getMovieGenresByIdsFromDatabase(value.genreIds).listen((value) {
+      movieModel.getMovieGenresByIdsFromDatabase(value.genreIds??[]).listen((value) {
         genresStreamController.sink.add(value);
       }).onError((error) {
         debugPrint(error.toString());
