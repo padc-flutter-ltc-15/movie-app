@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:themovieapp/bloc/detail_bloc.dart';
+import 'package:themovieapp/bloc/home_bloc.dart';
 import 'package:themovieapp/data/vos/genre_vo.dart';
 import 'package:themovieapp/data/vos/movie_vo.dart';
 import 'package:themovieapp/network/api_constants.dart';
@@ -25,104 +26,109 @@ class DetailScreen extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => DetailBloc(id),
       child: Scaffold(
-        body: Container(
-          color: HOME_SCREEN_BG_COLOR,
-          child: CustomScrollView(
-            slivers: [
-              Consumer<DetailBloc>(
-                builder: (context, bloc, child) {
-                  return MovieDetailSliverAppBarView(
+        body: Selector<DetailBloc, MovieVO?>(
+          selector: (context, bloc) => bloc.movieDetail,
+          builder: (context, movieDetailValue, child) {
+            return Container(
+              color: HOME_SCREEN_BG_COLOR,
+              child: CustomScrollView(
+                slivers: [
+                  MovieDetailSliverAppBarView(
                     onTapBack: () {
                       Navigator.pop(context);
                     },
-                    movie: bloc.movieDetail,
-                  );
-                },
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate(
-                    [
-                      Container(
-                        margin: EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_2X),
-                        child: Column(
-                          children: [
-                            Consumer<DetailBloc>(builder: (context, bloc, child) {
-                              return TrailerSection(
-                                genreList: bloc.genres,
-                              );
-                            }),
-                            SizedBox(
-                              height: MARGIN_MEDIUM,
-                            ),
-                            Consumer<DetailBloc>(builder: (context, bloc, child) {
-                              return StoryLineView(
-                                text: bloc.movieDetail?.overview??"",
-                              );
-                            }),
-                            SizedBox(
-                              height: MARGIN_MEDIUM_2X,
-                            ),
-                            Row(
+                    movie: movieDetailValue,
+                  ),
+                  SliverList(
+                    delegate: SliverChildListDelegate(
+                        [
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_2X),
+                            child: Column(
                               children: [
-                                MovieDetailScreenButtonView(
-                                  title: "Play Trailer",
-                                  icon: Icons.play_circle_fill,
-                                  iconColor: Colors.black54,
-                                  backgroundColor: Colors.amber,
-                                  isGhostButton: false,
+                                Selector<DetailBloc, List<GenreVO>>(
+                                  selector: (context, bloc) => bloc.genres,
+                                  builder: (context, value, child) {
+                                    return TrailerSection(
+                                      genreList: value,
+                                    );
+                                  },
                                 ),
                                 SizedBox(
-                                  width: MARGIN_MEDIUM,
+                                  height: MARGIN_MEDIUM,
                                 ),
-                                MovieDetailScreenButtonView(
-                                  title: "Rate Movie",
-                                  icon: Icons.star,
-                                  iconColor: Colors.amber,
-                                  backgroundColor: HOME_SCREEN_BG_COLOR,
-                                  isGhostButton: true,
+                                StoryLineView(
+                                  text: movieDetailValue?.overview??"",
                                 ),
+                                SizedBox(
+                                  height: MARGIN_MEDIUM_2X,
+                                ),
+                                Row(
+                                  children: [
+                                    MovieDetailScreenButtonView(
+                                      title: "Play Trailer",
+                                      icon: Icons.play_circle_fill,
+                                      iconColor: Colors.black54,
+                                      backgroundColor: Colors.amber,
+                                      isGhostButton: false,
+                                    ),
+                                    SizedBox(
+                                      width: MARGIN_MEDIUM,
+                                    ),
+                                    MovieDetailScreenButtonView(
+                                      title: "Rate Movie",
+                                      icon: Icons.star,
+                                      iconColor: Colors.amber,
+                                      backgroundColor: HOME_SCREEN_BG_COLOR,
+                                      isGhostButton: true,
+                                    ),
+                                  ],
+                                )
                               ],
-                            )
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: MARGIN_MEDIUM_2X,
-                      ),
-                      Consumer<DetailBloc>(builder: (context, bloc, child) {
-                        return ActorsAndCreatorsSection(
-                          title: MAIN_SCREEN_BEST_ACTORS,
-                          seeMore: MAIN_SCREEN_SEE_MORE_ACTORS,
-                          seeMoreVisibility: false,
-                          actorList: bloc.actors,
-                        );
-                      }),
-                      SizedBox(
-                        height: MARGIN_LARGE,
-                      ),
-                      Consumer<DetailBloc>(builder: (context, bloc, child) {
-                        return Container(
-                          padding: EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_2X),
-                          child: AboutFilmSection(
-                            movie: bloc.movieDetail,
+                            ),
                           ),
-                        );
-                      }),
-                      SizedBox(
-                        height: MARGIN_MEDIUM_2X,
-                      ),
-                      Consumer<DetailBloc>(builder: (context, bloc, child) {
-                        return ActorsAndCreatorsSection(
-                          title: MAIN_SCREEN_CREATORS,
-                          seeMore: MAIN_SCREEN_SEE_MORE_CREATORS,
-                          actorList: bloc.creators,
-                        );
-                      }),
-                    ]
-                ),
+                          SizedBox(
+                            height: MARGIN_MEDIUM_2X,
+                          ),
+                          Selector<DetailBloc, List<ActorVO>>(
+                            selector: (context, bloc) => bloc.actors,
+                            builder: (context, value, child) {
+                              return ActorsAndCreatorsSection(
+                                title: MAIN_SCREEN_CREATORS,
+                                seeMore: MAIN_SCREEN_SEE_MORE_CREATORS,
+                                actorList: value,
+                              );
+                            },
+                          ),
+                          SizedBox(
+                            height: MARGIN_LARGE,
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: MARGIN_MEDIUM_2X),
+                            child: AboutFilmSection(
+                              movie: movieDetailValue,
+                            ),
+                          ),
+                          SizedBox(
+                            height: MARGIN_MEDIUM_2X,
+                          ),
+                          Selector<DetailBloc, List<ActorVO>>(
+                            selector: (context, bloc) => bloc.creators,
+                            builder: (context, value, child) {
+                              return ActorsAndCreatorsSection(
+                                title: MAIN_SCREEN_CREATORS,
+                                seeMore: MAIN_SCREEN_SEE_MORE_CREATORS,
+                                actorList: value,
+                              );
+                            },
+                          ),
+                        ]
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
