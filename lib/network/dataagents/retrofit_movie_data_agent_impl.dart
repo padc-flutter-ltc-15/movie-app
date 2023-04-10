@@ -101,16 +101,14 @@ class RetrofitMovieDataAgentImpl extends MovieDataAgent {
   }
 
   @override
-  Future<GetMovieDetailsCreditsResponse> getMovieDetailsCredits(int id) {
-    return movieApi.getMovieDetailsCredits(API_KEY, LANGUAGE_EN_US, id)
+  Future<List<List<ActorVO>>> getMovieDetailsCredits(int id) {
+    return movieApi
+        .getMovieDetailsCredits(API_KEY, LANGUAGE_EN_US, id)
         .asStream()
-        .handleError((error) {
-          debugPrint("crews error " + error.toString());
-        })
-        .map((response) {
-          debugPrint("crews " + response.crew.toString());
-          return response;
-        })
+        .map((response) => [
+          response.cast ?? [],
+          response.crew ?? []
+        ])
         .first;
   }
 }

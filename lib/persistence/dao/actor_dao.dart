@@ -1,5 +1,4 @@
 
-
 import 'package:hive/hive.dart';
 import 'package:themovieapp/data/vos/actor_vo.dart';
 import 'package:themovieapp/persistence/hive_constants.dart';
@@ -14,6 +13,14 @@ class ActorDao {
 
   ActorDao._internal() {
 
+  }
+
+  Stream<List<ActorVO>> getAllActorsStream() {
+    return Stream.value(getActorBox().values.toList());
+  }
+
+  Stream<void> getAllActorsEventStream() {
+    return getActorBox().watch();
   }
 
   void saveAllActors(List<ActorVO> list) async {

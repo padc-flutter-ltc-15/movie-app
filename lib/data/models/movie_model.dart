@@ -7,21 +7,21 @@ import '../vos/movie_vo.dart';
 
 abstract class MovieModel {
   /// Network
-  Future<List<MovieVO>> getNowPlayingMovies();
-  Future<List<MovieVO>> getPopularMovies();
-  Future<List<MovieVO>> getTopRelatedMovies();
-  Future<List<GenreVO>> getMovieGenres();
+  void getNowPlayingMovies(int page);
+  void getPopularMovies(int page);
+  void getTopRelatedMovies(int page);
+  void getMovieGenres();
   Future<List<MovieVO>> getMoviesByGenre(int genreId);
-  Future<List<ActorVO>> getActors();
-  Future<MovieVO?> getMovieDetails(int id);
-  Future<GetMovieDetailsCreditsResponse?> getMovieDetailsCredits(int id);
+  void getActors();
+  void getMovieDetails(int id);
+  Future<List<List<ActorVO>>> getMovieDetailsCredits(int id);
 
   /// Database
-  Future<List<MovieVO>> getNowPlayingMoviesFromDatabase();
-  Future<List<MovieVO>> getPopularMoviesFromDatabase();
-  Future<List<MovieVO>> getTopRelatedMoviesFromDatabase();
-  Future<List<GenreVO>> getMovieGenresFromDatabase();
-  Future<List<GenreVO>> getMovieGenresByIdsFromDatabase(List<int> ids);
-  Future<List<ActorVO>> getActorsFromDatabase();
-  Future<MovieVO> getMovieDetailsFromDatabase(int id);
+  Stream<List<MovieVO>> getNowPlayingMoviesFromDatabase();
+  Stream<List<MovieVO>> getPopularMoviesFromDatabase();
+  Stream<List<MovieVO>> getTopRelatedMoviesFromDatabase();
+  Stream<List<GenreVO>> getMovieGenresFromDatabase();
+  Stream<List<GenreVO>> getMovieGenresByIdsFromDatabase(List<int> ids);
+  Stream<List<ActorVO>> getActorsFromDatabase();
+  Stream<MovieVO> getMovieDetailsFromDatabase(int id);
 }

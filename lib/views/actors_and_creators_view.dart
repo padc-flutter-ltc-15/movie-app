@@ -12,7 +12,7 @@ class ActorsAndCreatorsSection extends StatelessWidget {
   final String title;
   final String seeMore;
   final bool seeMoreVisibility;
-  final List<ActorVO> actorList;
+  final List<ActorVO>? actorList;
 
   const ActorsAndCreatorsSection({
     Key? key, required this.title, required this.seeMore, this.seeMoreVisibility = true, required this.actorList,
@@ -38,14 +38,12 @@ class ActorsAndCreatorsSection extends StatelessWidget {
         Container(
           height: ACTOR_LIST_HEIGH,
           padding: EdgeInsets.only(left: MARGIN_MEDIUM_2X),
-          child: ListView.builder( /// ListView
-            scrollDirection: Axis.horizontal,
-            itemCount: actorList.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ActorViewItem(
-                actor: actorList[index],
-              );
-            },
+          child: ListView(
+              padding: const EdgeInsets.only(left: MARGIN_MEDIUM_2X),
+              scrollDirection: Axis.horizontal,
+              children: this.actorList
+                  ?.map((actor) => ActorViewItem(actor: actor))
+                  .toList()??[],
           ),
         )
       ],

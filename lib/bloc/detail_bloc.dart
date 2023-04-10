@@ -20,21 +20,21 @@ class DetailBloc {
 
   DetailBloc(int id) {
     movieModel.getMovieDetails(id);
-    movieModel.getMovieDetailsFromDatabase(id).then((value) {
+    movieModel.getMovieDetailsFromDatabase(id).listen((value) {
       movieDetailStreamController.sink.add(value);
 
-      movieModel.getMovieGenresByIdsFromDatabase(value.genreIds).then((value) {
+      movieModel.getMovieGenresByIdsFromDatabase(value.genreIds).listen((value) {
         genresStreamController.sink.add(value);
-      }).catchError((error) {
+      }).onError((error) {
         debugPrint(error.toString());
       });
-    }).catchError((error) {
+    }).onError((error) {
       debugPrint(error.toString());
     });
 
     movieModel.getMovieDetailsCredits(id).then((value) {
-      actorsStreamController.sink.add(value?.cast??[]);
-      creatorsStreamController.sink.add(value?.crew??[]);
+      actorsStreamController.sink.add(value.first.take(10).toList());
+      creatorsStreamController.sink.add(value[1].take(10).toList());
     }).catchError((error) {
       debugPrint(error.toString());
     });

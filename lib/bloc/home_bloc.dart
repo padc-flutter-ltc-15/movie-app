@@ -21,29 +21,26 @@ class HomeBloc {
   MovieModel movieModel = MovieModelImpl();
 
   HomeBloc() {
-    movieModel.getNowPlayingMovies();
-    movieModel.getNowPlayingMoviesFromDatabase().then((value) {
+    movieModel.getNowPlayingMoviesFromDatabase().listen((value) {
       nowPlayingMoviesStreamController.sink.add(value);
-    }).catchError((error) {
+    }).onError((error) {
       debugPrint(error.toString());
     });
 
-    movieModel.getPopularMovies();
-    movieModel.getPopularMoviesFromDatabase().then((value) {
+    movieModel.getPopularMoviesFromDatabase().listen((value) {
       popularMoviesStreamController.sink.add(value);
-    }).catchError((error) {
+    }).onError((error) {
       debugPrint(error.toString());
     });
 
-    movieModel.getTopRelatedMovies();
-    movieModel.getTopRelatedMoviesFromDatabase().then((value) {
+    movieModel.getTopRelatedMoviesFromDatabase().listen((value) {
       showCaseMoviesStreamController.sink.add(value);
-    }).catchError((error) {
+    }).onError((error) {
       debugPrint(error.toString());
     });
 
     movieModel.getMovieGenres();
-    movieModel.getMovieGenresFromDatabase().then((value) {
+    movieModel.getMovieGenresFromDatabase().listen((value) {
       genresStreamController.sink.add(value);
 
       movieModel.getMoviesByGenre(value[0].id).then((value) {
@@ -51,14 +48,14 @@ class HomeBloc {
       }).catchError((error) {
         debugPrint(error.toString());
       });
-    }).catchError((error) {
+    }).onError((error) {
       debugPrint(error.toString());
     });
 
     movieModel.getActors();
-    movieModel.getActorsFromDatabase().then((value) {
+    movieModel.getActorsFromDatabase().listen((value) {
       actorsStreamController.sink.add(value);
-    }).catchError((error) {
+    }).onError((error) {
       debugPrint(error.toString());
     });
   }
