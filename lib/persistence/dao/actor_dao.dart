@@ -16,6 +16,21 @@ class ActorDao {
 
   }
 
+  /// Reactive Programming
+
+  Stream<void> getAllActorsEventStream() {
+    return getActorBox().watch();
+  }
+
+  Stream<List<ActorVO>> getActorsStream() {
+    return Stream.value(
+        getAllActors()
+            .toList()
+    );
+  }
+
+  /// Reactive Programming
+
   void saveAllActors(List<ActorVO> list) async {
     Map<int, ActorVO> map = Map.fromIterable(list,
         key: (actor) => actor.id,

@@ -23,10 +23,10 @@ class DetailBloc extends ChangeNotifier {
       movieDetail = value;
       notifyListeners();
 
-      movieModel.getMovieGenresByIdsFromDatabase(value.genreIds).then((value) {
+      movieModel.getMovieGenresByIdsFromDatabase(value.genreIds).listen((value) {
         genres = value;
         notifyListeners();
-      }).catchError((error) {
+      }).onError((error) {
         debugPrint(error.toString());
       });
     }).catchError((error) {

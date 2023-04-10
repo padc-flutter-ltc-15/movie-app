@@ -22,31 +22,31 @@ class HomeBloc extends ChangeNotifier {
 
   HomeBloc() {
     movieModel.getNowPlayingMovies();
-    movieModel.getNowPlayingMoviesFromDatabase().then((value) {
+    movieModel.getNowPlayingMoviesFromDatabase().listen((value) {
       nowPlayingMovies = value;
       notifyListeners();
-    }).catchError((error) {
+    }).onError((error) {
       debugPrint(error.toString());
     });
 
     movieModel.getPopularMovies();
-    movieModel.getPopularMoviesFromDatabase().then((value) {
+    movieModel.getPopularMoviesFromDatabase().listen((value) {
       popularMovies = value;
       notifyListeners();
-    }).catchError((error) {
+    }).onError((error) {
       debugPrint(error.toString());
     });
 
     movieModel.getTopRelatedMovies();
-    movieModel.getTopRelatedMoviesFromDatabase().then((value) {
+    movieModel.getTopRelatedMoviesFromDatabase().listen((value) {
       showcaseMovies = value;
       notifyListeners();
-    }).catchError((error) {
+    }).onError((error) {
       debugPrint(error.toString());
     });
 
     movieModel.getMovieGenres();
-    movieModel.getMovieGenresFromDatabase().then((value) {
+    movieModel.getMovieGenresFromDatabase().listen((value) {
       genres = value;
       notifyListeners();
 
@@ -56,15 +56,15 @@ class HomeBloc extends ChangeNotifier {
       }).catchError((error) {
         debugPrint(error.toString());
       });
-    }).catchError((error) {
+    }).onError((error) {
       debugPrint(error.toString());
     });
 
     movieModel.getActors();
-    movieModel.getActorsFromDatabase().then((value) {
+    movieModel.getActorsFromDatabase().listen((value) {
       actors = value;
       notifyListeners();
-    }).catchError((error) {
+    }).onError((error) {
       debugPrint(error.toString());
     });
   }

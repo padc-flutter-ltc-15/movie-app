@@ -17,6 +17,36 @@ class GenreDao {
 
   }
 
+  /// Reactive Programming
+
+  Stream<void> getAllGenresEventStream() {
+    return getGenreBox().watch();
+  }
+
+  Stream<List<GenreVO>> getGenresStream() {
+    return Stream.value(
+        getAllGenres()
+            .toList()
+    );
+  }
+
+  Stream<List<GenreVO>> getGenresByIdsStream(List<int> ids) {
+    List<GenreVO> allGenres = getGenreBox().values.toList();
+    List<GenreVO> filteredGenres = List.empty(growable: true);
+
+    for (var genre in allGenres) {
+      for(var id in ids) {
+        if(id == genre.id) {
+          filteredGenres.add(genre);
+        }
+      }
+    }
+
+    return Stream.value(filteredGenres);
+  }
+
+  /// Reactive Programming
+
   void saveAllGenres(List<GenreVO> list) async {
     Map<int, GenreVO> map = Map.fromIterable(list,
       key: (genre) => genre.id,
@@ -26,7 +56,7 @@ class GenreDao {
     await getGenreBox().putAll(map);
   }
 
-  List<GenreVO>? getGenresByIds(List<int> ids) {
+  List<GenreVO> getGenresByIds(List<int> ids) {
     List<GenreVO> allGenres = getGenreBox().values.toList();
     List<GenreVO> filteredGenres = List.empty(growable: true);
 
