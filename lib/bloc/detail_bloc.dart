@@ -1,7 +1,5 @@
 
-import 'dart:async';
-
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:themovieapp/data/vos/actor_vo.dart';
 
 import '../data/models/movie_model.dart';
@@ -9,22 +7,25 @@ import '../data/models/movie_model_impl.dart';
 import '../data/vos/genre_vo.dart';
 import '../data/vos/movie_vo.dart';
 
-class DetailBloc {
+class DetailBloc extends ChangeNotifier {
 
-  StreamController<MovieVO> movieDetailStreamController = StreamController();
-  StreamController<List<GenreVO>> genresStreamController = StreamController();
-  StreamController<List<ActorVO>> actorsStreamController = StreamController();
-  StreamController<List<ActorVO>> creatorsStreamController = StreamController();
+  /// States
+  MovieVO? movieDetail;
+  List<GenreVO> genres = [];
+  List<ActorVO> actors = [];
+  List<ActorVO> creators = [];
 
   MovieModel movieModel = MovieModelImpl();
 
   DetailBloc(int id) {
     movieModel.getMovieDetails(id);
     movieModel.getMovieDetailsFromDatabase(id).then((value) {
-      movieDetailStreamController.sink.add(value);
+      movieDetail = value;
+      notifyListeners();
 
       movieModel.getMovieGenresByIdsFromDatabase(value.genreIds).then((value) {
-        genresStreamController.sink.add(value);
+        genres = value;
+        notifyListeners();
       }).catchError((error) {
         debugPrint(error.toString());
       });
@@ -33,17 +34,11 @@ class DetailBloc {
     });
 
     movieModel.getMovieDetailsCredits(id).then((value) {
-      actorsStreamController.sink.add(value?.cast??[]);
-      creatorsStreamController.sink.add(value?.crew??[]);
+      actors = value?.cast??[];
+      creators = value?.crew??[];
+      notifyListeners();
     }).catchError((error) {
       debugPrint(error.toString());
     });
-  }
-
-  void dispose() {
-    movieDetailStreamController.close();
-    genresStreamController.close();
-    actorsStreamController.close();
-    creatorsStreamController.close();
   }
 }

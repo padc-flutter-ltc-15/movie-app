@@ -1,7 +1,7 @@
 
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:themovieapp/data/models/movie_model_impl.dart';
 import 'package:themovieapp/data/vos/actor_vo.dart';
 import 'package:themovieapp/data/vos/genre_vo.dart';
@@ -9,45 +9,50 @@ import 'package:themovieapp/data/vos/movie_vo.dart';
 
 import '../data/models/movie_model.dart';
 
-class HomeBloc {
-  /// Reactive Streams
-  StreamController<List<MovieVO>> nowPlayingMoviesStreamController = StreamController();
-  StreamController<List<MovieVO>> popularMoviesStreamController = StreamController();
-  StreamController<List<MovieVO>> showCaseMoviesStreamController = StreamController();
-  StreamController<List<MovieVO>> moviesByGenreIdsStreamController = StreamController();
-  StreamController<List<GenreVO>> genresStreamController = StreamController();
-  StreamController<List<ActorVO>> actorsStreamController = StreamController();
+class HomeBloc extends ChangeNotifier {
+  /// States
+  List<MovieVO> nowPlayingMovies = [];
+  List<MovieVO> popularMovies = [];
+  List<MovieVO> showcaseMovies = [];
+  List<ActorVO> actors = [];
+  List<GenreVO> genres = [];
+  List<MovieVO> moviesByGenre = [];
 
   MovieModel movieModel = MovieModelImpl();
 
   HomeBloc() {
     movieModel.getNowPlayingMovies();
     movieModel.getNowPlayingMoviesFromDatabase().then((value) {
-      nowPlayingMoviesStreamController.sink.add(value);
+      nowPlayingMovies = value;
+      notifyListeners();
     }).catchError((error) {
       debugPrint(error.toString());
     });
 
     movieModel.getPopularMovies();
     movieModel.getPopularMoviesFromDatabase().then((value) {
-      popularMoviesStreamController.sink.add(value);
+      popularMovies = value;
+      notifyListeners();
     }).catchError((error) {
       debugPrint(error.toString());
     });
 
     movieModel.getTopRelatedMovies();
     movieModel.getTopRelatedMoviesFromDatabase().then((value) {
-      showCaseMoviesStreamController.sink.add(value);
+      showcaseMovies = value;
+      notifyListeners();
     }).catchError((error) {
       debugPrint(error.toString());
     });
 
     movieModel.getMovieGenres();
     movieModel.getMovieGenresFromDatabase().then((value) {
-      genresStreamController.sink.add(value);
+      genres = value;
+      notifyListeners();
 
       movieModel.getMoviesByGenre(value[0].id).then((value) {
-        moviesByGenreIdsStreamController.sink.add(value);
+        moviesByGenre = value;
+        notifyListeners();
       }).catchError((error) {
         debugPrint(error.toString());
       });
@@ -57,7 +62,8 @@ class HomeBloc {
 
     movieModel.getActors();
     movieModel.getActorsFromDatabase().then((value) {
-      actorsStreamController.sink.add(value);
+      actors = value;
+      notifyListeners();
     }).catchError((error) {
       debugPrint(error.toString());
     });
@@ -65,18 +71,10 @@ class HomeBloc {
 
   void getMoviesByGenre(int id) {
     movieModel.getMoviesByGenre(id).then((value) {
-      moviesByGenreIdsStreamController.sink.add(value);
+      moviesByGenre = value;
+      notifyListeners();
     }).catchError((error) {
       debugPrint(error.toString());
     });
-  }
-
-  void dispose() {
-    nowPlayingMoviesStreamController.close();
-    popularMoviesStreamController.close();
-    showCaseMoviesStreamController.close();
-    moviesByGenreIdsStreamController.close();
-    genresStreamController.close();
-    actorsStreamController.close();
   }
 }
