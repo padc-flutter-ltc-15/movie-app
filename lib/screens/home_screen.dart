@@ -59,7 +59,7 @@ class HomeScreen extends StatelessWidget {
                 builder: (context, child, model) {
                   return BestPopularMoviesAndSeriesSection(
                     onTapMovie: (int id) => _navigateToDetailScreen(context, id, model),
-                    movieList: model.nowPlayingMovieList??[],
+                    movieList: model.nowPlayingMovieList,
                   );
                 },
               ),

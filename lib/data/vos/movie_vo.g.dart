@@ -17,20 +17,20 @@ class MovieVOAdapter extends TypeAdapter<MovieVO> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return MovieVO(
-      fields[0] as bool,
-      fields[1] as String,
-      (fields[2] as List).cast<int>(),
-      fields[3] as int,
-      fields[4] as String,
-      fields[5] as String,
-      fields[6] as String,
-      fields[7] as double,
-      fields[8] as String,
-      fields[9] as String,
+      fields[0] as bool?,
+      fields[1] as String?,
+      (fields[2] as List?)?.cast<int>(),
+      fields[3] as int?,
+      fields[4] as String?,
+      fields[5] as String?,
+      fields[6] as String?,
+      fields[7] as double?,
+      fields[8] as String?,
+      fields[9] as String?,
       fields[10] as String,
-      fields[11] as bool,
-      fields[12] as double,
-      fields[13] as int,
+      fields[11] as bool?,
+      fields[12] as double?,
+      fields[13] as int?,
     )
       ..isNowPlaying = fields[14] as bool?
       ..isPopular = fields[15] as bool?
@@ -93,20 +93,20 @@ class MovieVOAdapter extends TypeAdapter<MovieVO> {
 // **************************************************************************
 
 MovieVO _$MovieVOFromJson(Map<String, dynamic> json) => MovieVO(
-      json['adult'] as bool,
-      json['backdrop_path'] as String,
-      (json['genre_ids'] as List<dynamic>).map((e) => e as int).toList(),
-      json['id'] as int,
-      json['original_language'] as String,
-      json['original_title'] as String,
-      json['overview'] as String,
-      (json['popularity'] as num).toDouble(),
-      json['poster_path'] as String,
-      json['release_date'] as String,
+      json['adult'] as bool?,
+      json['backdrop_path'] as String?,
+      (json['genre_ids'] as List<dynamic>?)?.map((e) => e as int).toList(),
+      json['id'] as int?,
+      json['original_language'] as String?,
+      json['original_title'] as String?,
+      json['overview'] as String?,
+      (json['popularity'] as num?)?.toDouble(),
+      json['poster_path'] as String?,
+      json['release_date'] as String?,
       json['title'] as String,
-      json['video'] as bool,
-      (json['vote_average'] as num).toDouble(),
-      json['vote_count'] as int,
+      json['video'] as bool?,
+      (json['vote_average'] as num?)?.toDouble(),
+      json['vote_count'] as int?,
     )
       ..isNowPlaying = json['isNowPlaying'] as bool?
       ..isPopular = json['isPopular'] as bool?

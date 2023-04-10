@@ -1,4 +1,5 @@
 
+import 'package:flutter/material.dart';
 import 'package:stream_transform/stream_transform.dart';
 import 'package:themovieapp/data/models/movie_model.dart';
 import 'package:themovieapp/data/vos/movie_vo.dart';
@@ -22,7 +23,7 @@ class MovieModelImpl extends MovieModel {
 
   /// private constructor
   MovieModelImpl._internal() {
-    getPopularMoviesFromDatabase();
+    getPopularMovies(1);
     getNowPlayingMoviesFromDatabase();
     getTopRelatedMoviesFromDatabase();
     getMovieGenresFromDatabase();
@@ -70,6 +71,8 @@ class MovieModelImpl extends MovieModel {
       this.popularMovieList = popularMovieList;
 
       notifyListeners();
+    }).onError((error, stackTrace) {
+      debugPrint(error.toString());
     });
   }
 

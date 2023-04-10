@@ -106,7 +106,7 @@ class ShowCaseView extends StatelessWidget {
                   SizedBox(
                     height: MARGIN_SMALL,
                   ),
-                  TitleText(title: movie.releaseDate)
+                  TitleText(title: movie.releaseDate??"")
                 ],
               ),
             ),

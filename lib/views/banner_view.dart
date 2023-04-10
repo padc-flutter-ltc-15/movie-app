@@ -37,18 +37,10 @@ class _BannerSectionState extends State<BannerSection> {
             },
             children: widget.movieList?.map((item) => BannerView(
                 url: "$IMAGE_BASE_URL${item.posterPath}",
-                title: item.title)
+                title: item.title??"")
             ).toList()??[],
           ),
         ),
-        DotsIndicator(
-          dotsCount: widget.movieList?.length??1,
-          position: _position,
-          decorator: DotsDecorator(
-            activeColor: HOME_SCREEN_BANNER_DOT_ACTIVE_COLOR,
-            color: HOME_SCREEN_BANNER_DOT_INACTIVE_COLOR
-          ),
-        )
       ],
     );
   }
