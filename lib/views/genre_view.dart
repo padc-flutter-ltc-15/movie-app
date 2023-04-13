@@ -5,6 +5,7 @@ import 'package:themovieapp/data/vos/movie_vo.dart';
 import 'package:themovieapp/resources/colors.dart';
 
 import '../resources/dimens.dart';
+import '../widgets/title_and_horizontal_movie_list_view.dart';
 import 'movie_view.dart';
 
 class GenreSection extends StatelessWidget {

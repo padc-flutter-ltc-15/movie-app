@@ -15,6 +15,7 @@ import 'package:themovieapp/widgets/title_text.dart';
 
 import '../data/vos/actor_vo.dart';
 import '../views/actors_and_creators_view.dart';
+import '../widgets/title_and_horizontal_movie_list_view.dart';
 
 class DetailScreen extends StatelessWidget {
   final int id;
@@ -122,6 +123,19 @@ class DetailScreen extends StatelessWidget {
                               );
                             },
                           ),
+                          SizedBox(
+                            height: MARGIN_MEDIUM_2X,
+                          ),
+                          Selector<DetailBloc, List<MovieVO>>(
+                            selector: (context, bloc) => bloc.relatedMovies,
+                            builder: (context, value, child) {
+                              return TitleAndHorizontalMovieListView(
+                                onTapMovie: (int id) => _navigateToDetailScreen(context, id),
+                                movieList: value,
+                                title: DETAIL_SCREEN_RELATED_MOVIES_AND_SERIES,
+                              );
+                            },
+                          ),
                         ]
                     ),
                   ),
@@ -132,6 +146,10 @@ class DetailScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _navigateToDetailScreen(BuildContext context, int id) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => DetailScreen(id: id,)));
   }
 }
 

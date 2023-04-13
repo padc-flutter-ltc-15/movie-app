@@ -11,6 +11,7 @@ import 'package:themovieapp/resources/dimens.dart';
 import 'package:themovieapp/resources/strings.dart';
 import 'package:themovieapp/screens/detail_screen.dart';
 import 'package:themovieapp/views/genre_view.dart';
+import 'package:themovieapp/widgets/title_and_horizontal_movie_list_view.dart';
 import '../views/actors_and_creators_view.dart';
 import '../views/banner_view.dart';
 import '../views/check_movie_show_time_view.dart';
@@ -66,9 +67,10 @@ class HomeScreen extends StatelessWidget {
                 Selector<HomeBloc, List<MovieVO>>(
                   selector: (context, bloc) => bloc.popularMovies,
                   builder: (context, value, child) {
-                    return BestPopularMoviesAndSeriesSection(
+                    return TitleAndHorizontalMovieListView(
                       onTapMovie: (int id) => _navigateToDetailScreen(context, id),
                       movieList: value,
+                      title: MAIN_SCREEN_BEST_POPULAR_MOVIES_AND_SERIES,
                     );
                   },
                 ),

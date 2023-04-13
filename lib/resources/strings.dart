@@ -9,6 +9,8 @@ const MAIN_SCREEN_SEE_MORE_ACTORS = "SEE MORE ACTORS";
 const MAIN_SCREEN_SEE_MORE = "SEE MORE";
 const MAIN_SCREEN_CREATORS = "CREATORS";
 const MAIN_SCREEN_SEE_MORE_CREATORS = "SEE MORE CREATORS";
+
 const DETAIL_SCREEN_STORY_LINE_TITLE = "STORYLINE";
+const DETAIL_SCREEN_RELATED_MOVIES_AND_SERIES = "RELATED MOVIES AND SERIES";
 
 const LOREM_IPSM = "In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available. Wikipedia";

@@ -14,6 +14,7 @@ class DetailBloc extends ChangeNotifier {
   List<GenreVO> genres = [];
   List<ActorVO> actors = [];
   List<ActorVO> creators = [];
+  List<MovieVO> relatedMovies = [];
 
   MovieModel movieModel = MovieModelImpl();
 
@@ -29,6 +30,8 @@ class DetailBloc extends ChangeNotifier {
       }).onError((error) {
         debugPrint(error.toString());
       });
+      
+      fetchRelatedMovies(value.genreIds?.last??0);
     }).catchError((error) {
       debugPrint(error.toString());
     });
@@ -36,6 +39,15 @@ class DetailBloc extends ChangeNotifier {
     movieModel.getMovieDetailsCredits(id).then((value) {
       actors = value?.cast??[];
       creators = value?.crew??[];
+      notifyListeners();
+    }).catchError((error) {
+      debugPrint(error.toString());
+    });
+  }
+  
+  void fetchRelatedMovies(int genreId) {
+    movieModel.getMoviesByGenre(genreId).then((value) {
+      relatedMovies = value;
       notifyListeners();
     }).catchError((error) {
       debugPrint(error.toString());
