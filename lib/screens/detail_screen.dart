@@ -133,6 +133,10 @@ class DetailScreen extends StatelessWidget {
                                 onTapMovie: (int id) => _navigateToDetailScreen(context, id),
                                 movieList: value,
                                 title: DETAIL_SCREEN_RELATED_MOVIES_AND_SERIES,
+                                onListEndReached: () {
+                                  var detailBloc = Provider.of<DetailBloc>(context, listen: false);
+                                  detailBloc.fetchRelatedMovies();
+                                },
                               );
                             },
                           ),

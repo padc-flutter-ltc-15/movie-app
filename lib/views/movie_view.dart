@@ -11,9 +11,10 @@ class BestPopularMoviesAndSeriesSection extends StatelessWidget {
 
   final Function onTapMovie;
   final List<MovieVO> movieList;
+  final Function onListEndReached;
 
   const BestPopularMoviesAndSeriesSection({
-    Key? key, required this.onTapMovie, required this.movieList,
+    Key? key, required this.onTapMovie, required this.movieList, required this.onListEndReached,
   }) : super(key: key);
 
   @override
@@ -35,6 +36,7 @@ class BestPopularMoviesAndSeriesSection extends StatelessWidget {
         HorizontalMovieListView(
           onTapMovie: onTapMovie,
           movieList: movieList,
+          onListEndReached: onListEndReached,
         ), /// Movie List
       ],
     );

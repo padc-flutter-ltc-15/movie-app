@@ -14,6 +14,8 @@ class DetailBloc extends ChangeNotifier {
   List<GenreVO> genres = [];
   List<ActorVO> actors = [];
   List<ActorVO> creators = [];
+  int genreId = 0;
+  int relatedMoviePage = 1;
   List<MovieVO> relatedMovies = [];
 
   MovieModel movieModel = MovieModelImpl();
@@ -30,8 +32,9 @@ class DetailBloc extends ChangeNotifier {
       }).onError((error) {
         debugPrint(error.toString());
       });
-      
-      fetchRelatedMovies(value.genreIds?.last??0);
+
+      genreId = value.genreIds?.last??0;
+      fetchRelatedMovies();
     }).catchError((error) {
       debugPrint(error.toString());
     });
@@ -45,8 +48,9 @@ class DetailBloc extends ChangeNotifier {
     });
   }
   
-  void fetchRelatedMovies(int genreId) {
-    movieModel.getMoviesByGenre(genreId).then((value) {
+  void fetchRelatedMovies() {
+    this.relatedMoviePage += 1;
+    movieModel.getMoviesByGenre(genreId, relatedMoviePage).then((value) {
       relatedMovies = value;
       notifyListeners();
     }).catchError((error) {

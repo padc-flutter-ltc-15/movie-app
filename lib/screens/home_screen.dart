@@ -71,6 +71,10 @@ class HomeScreen extends StatelessWidget {
                       onTapMovie: (int id) => _navigateToDetailScreen(context, id),
                       movieList: value,
                       title: MAIN_SCREEN_BEST_POPULAR_MOVIES_AND_SERIES,
+                      onListEndReached: () {
+                        var homeBloc = Provider.of<HomeBloc>(context, listen: false);
+                        homeBloc.onPopularMovieListEndReached();
+                      },
                     );
                   },
                 ),
@@ -91,6 +95,10 @@ class HomeScreen extends StatelessWidget {
                           onTabGenre: (id) {
                             var homeBloc = Provider.of<HomeBloc>(context, listen: false);
                             homeBloc.getMoviesByGenre(id);
+                          },
+                          onListEndReached: () {
+                            var homeBloc = Provider.of<HomeBloc>(context, listen: false);
+                            homeBloc.onMovieListByGenreEndReached();
                           },
                         );
                       },

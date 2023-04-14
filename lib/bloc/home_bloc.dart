@@ -12,10 +12,14 @@ import '../data/models/movie_model.dart';
 class HomeBloc extends ChangeNotifier {
   /// States
   List<MovieVO> nowPlayingMovies = [];
+  int popularMoviePage = 1;
   List<MovieVO> popularMovies = [];
+  int relatedMoviePage = 1;
   List<MovieVO> showcaseMovies = [];
   List<ActorVO> actors = [];
   List<GenreVO> genres = [];
+  int genreId = 0;
+  int genreMoviePage = 1;
   List<MovieVO> moviesByGenre = [];
 
   MovieModel movieModel = MovieModelImpl();
@@ -29,7 +33,7 @@ class HomeBloc extends ChangeNotifier {
       debugPrint(error.toString());
     });
 
-    movieModel.getPopularMovies();
+    movieModel.getPopularMovies(popularMoviePage);
     movieModel.getPopularMoviesFromDatabase().listen((value) {
       popularMovies = value;
       notifyListeners();
@@ -37,7 +41,7 @@ class HomeBloc extends ChangeNotifier {
       debugPrint(error.toString());
     });
 
-    movieModel.getTopRelatedMovies();
+    movieModel.getTopRelatedMovies(relatedMoviePage);
     movieModel.getTopRelatedMoviesFromDatabase().listen((value) {
       showcaseMovies = value;
       notifyListeners();
@@ -50,7 +54,8 @@ class HomeBloc extends ChangeNotifier {
       genres = value;
       notifyListeners();
 
-      movieModel.getMoviesByGenre(value[0].id).then((value) {
+      genreId = value[0].id;
+      movieModel.getMoviesByGenre(genreId, genreMoviePage).then((value) {
         moviesByGenre = value;
         notifyListeners();
       }).catchError((error) {
@@ -70,8 +75,28 @@ class HomeBloc extends ChangeNotifier {
   }
 
   void getMoviesByGenre(int id) {
-    movieModel.getMoviesByGenre(id).then((value) {
+    genreId = id;
+    genreMoviePage = 1;
+    moviesByGenre = [];
+
+    movieModel.getMoviesByGenre(genreId, genreMoviePage).then((value) {
       moviesByGenre = value;
+      notifyListeners();
+    }).catchError((error) {
+      debugPrint(error.toString());
+    });
+  }
+
+  void onPopularMovieListEndReached() {
+    this.popularMoviePage += 1;
+    movieModel.getPopularMovies(popularMoviePage);
+  }
+
+  void onMovieListByGenreEndReached() {
+    this.genreMoviePage += 1;
+
+    movieModel.getMoviesByGenre(genreId, genreMoviePage).then((value) {
+      moviesByGenre += value;
       notifyListeners();
     }).catchError((error) {
       debugPrint(error.toString());

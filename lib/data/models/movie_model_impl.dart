@@ -54,8 +54,8 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  Future<List<MovieVO>> getPopularMovies() {
-    return _movieDataAgent.getPopularMovies(1).then((movies) async {
+  Future<List<MovieVO>> getPopularMovies(int page) {
+    return _movieDataAgent.getPopularMovies(page).then((movies) async {
       List<MovieVO> popularMovieList = movies.map((movie) {
         movie.isNowPlaying = false;
         movie.isPopular = true;
@@ -71,8 +71,8 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  Future<List<MovieVO>> getTopRelatedMovies() {
-    return _movieDataAgent.getTopRelatedMovies(1).then((movies) async {
+  Future<List<MovieVO>> getTopRelatedMovies(int page) {
+    return _movieDataAgent.getTopRelatedMovies(page).then((movies) async {
       List<MovieVO> topRelatedMovieList = movies.map((movie) {
         movie.isNowPlaying = false;
         movie.isPopular = false;
@@ -101,8 +101,8 @@ class MovieModelImpl extends MovieModel {
   }
 
   @override
-  Future<List<MovieVO>> getMoviesByGenre(int genreId) {
-    return _movieDataAgent.getMoviesByGenre(1, genreId).then((movies) {
+  Future<List<MovieVO>> getMoviesByGenre(int genreId, int page) {
+    return _movieDataAgent.getMoviesByGenre(page, genreId).then((movies) {
       movieDao.saveAllMovies(movies);
 
       return Future.value(movies);

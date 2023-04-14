@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:themovieapp/components/smart_list_view.dart';
 import 'package:themovieapp/widgets/rating_view.dart';
 import 'package:themovieapp/widgets/title_text.dart';
 
@@ -13,9 +14,10 @@ class TitleAndHorizontalMovieListView extends StatelessWidget {
   final Function onTapMovie;
   final String title;
   final List<MovieVO> movieList;
+  final Function onListEndReached;
 
   const TitleAndHorizontalMovieListView({
-    Key? key, required this.onTapMovie, required this.title, required this.movieList,
+    Key? key, required this.onTapMovie, required this.title, required this.movieList, required this.onListEndReached,
   }) : super(key: key);
 
   @override
@@ -37,6 +39,7 @@ class TitleAndHorizontalMovieListView extends StatelessWidget {
         HorizontalMovieListView(
           onTapMovie: onTapMovie,
           movieList: movieList,
+          onListEndReached: onListEndReached,
         ), /// Movie List
       ],
     );
@@ -47,26 +50,25 @@ class HorizontalMovieListView extends StatelessWidget {
 
   final Function onTapMovie;
   final List<MovieVO> movieList;
+  final Function onListEndReached;
 
   const HorizontalMovieListView({
-    Key? key, required this.onTapMovie, required this.movieList,
+    Key? key, required this.onTapMovie, required this.movieList, required this.onListEndReached,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MOVIE_LIST_HEIGH,
-      padding: EdgeInsets.only(left: MARGIN_MEDIUM_2X),
-      child: ListView.builder( /// ListView
-        scrollDirection: Axis.horizontal,
-        itemCount: movieList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return MovieItemView(
-            onTapMovie: onTapMovie,
-            movie: movieList[index],
-          );
-        },
-      ),
+    return SmartListView(
+      heigh: MOVIE_LIST_HEIGH,
+      padding: MARGIN_MEDIUM_2X,
+      itemsLength: movieList.length,
+      itemBuilder: (BuildContext context, int index) {
+        return MovieItemView(
+          onTapMovie: onTapMovie,
+          movie: movieList[index],
+        );
+      },
+      onListEndReached: onListEndReached,
     );
   }
 }

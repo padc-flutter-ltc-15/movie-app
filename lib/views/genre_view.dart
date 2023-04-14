@@ -14,9 +14,10 @@ class GenreSection extends StatelessWidget {
   final List<MovieVO> movieList;
   final Function onTabMovie;
   final Function onTabGenre;
+  final Function onListEndReached;
 
   const GenreSection({
-    Key? key, required this.genreList, required this.onTabMovie, required this.movieList, required this.onTabGenre,
+    Key? key, required this.genreList, required this.onTabMovie, required this.movieList, required this.onTabGenre, required this.onListEndReached,
   }) : super(key: key);
 
   @override
@@ -49,6 +50,7 @@ class GenreSection extends StatelessWidget {
         HorizontalMovieListView(
           onTapMovie: onTabMovie,
           movieList: movieList,
+          onListEndReached: onListEndReached,
         ), /// Movie List
       ],
     );
