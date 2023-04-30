@@ -117,11 +117,26 @@ class MovieVO {
       this.title,
       this.video,
       this.voteAverage,
-      this.voteCount);
+      this.voteCount,
+      this.isTopRated,
+      this.isPopular,
+      this.isNowPlaying);
 
   factory MovieVO.fromJson(Map<String, dynamic> json) => _$MovieVOFromJson(json);
 
   Map<String, dynamic> toJson() => _$MovieVOToJson(this);
+
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is MovieVO &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          title == other.title;
+
+  @override
+  int get hashCode => id.hashCode ^ title.hashCode;
 
   @override
   String toString() {

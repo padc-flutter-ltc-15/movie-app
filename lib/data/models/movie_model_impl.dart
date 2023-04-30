@@ -8,16 +8,19 @@ import 'package:themovieapp/data/vos/movie_vo.dart';
 import 'package:themovieapp/network/dataagents/movie_data_agent.dart';
 import 'package:themovieapp/network/dataagents/retrofit_movie_data_agent_impl.dart';
 import 'package:themovieapp/persistence/dao/actor_dao.dart';
+import 'package:themovieapp/persistence/dao/actor_dao_impl.dart';
 import 'package:themovieapp/persistence/dao/genre_dao.dart';
+import 'package:themovieapp/persistence/dao/genre_dao_impl.dart';
 import 'package:themovieapp/persistence/dao/movie_dao.dart';
+import 'package:themovieapp/persistence/dao/movie_dao_impl.dart';
 
 import '../../network/responses/get_movie_details_credits_response.dart';
 
 class MovieModelImpl extends MovieModel {
 
-  MovieDao movieDao = MovieDao();
-  GenreDao genreDao = GenreDao();
-  ActorDao actorDao = ActorDao();
+  MovieDao movieDao = MovieDaoImpl();
+  GenreDao genreDao = GenreDaoImpl();
+  ActorDao actorDao = ActorDaoImpl();
 
   MovieDataAgent _movieDataAgent = RetrofitMovieDataAgentImpl();
 
@@ -32,6 +35,15 @@ class MovieModelImpl extends MovieModel {
   /// factory constructor
   factory MovieModelImpl() {
     return _singleton;
+  }
+
+  /// For Testing Purposes
+  void setDaosAndDataAgents(
+      MovieDao movieDaoTest, ActorDao actorDaoTest, GenreDao genreDaoTest , MovieDataAgent movieDataAgentTest) {
+    movieDao = movieDaoTest  ;
+    actorDao = actorDaoTest ;
+    genreDao = genreDaoTest ;
+    _movieDataAgent = movieDataAgentTest;
   }
 
   /// Start of Network Call

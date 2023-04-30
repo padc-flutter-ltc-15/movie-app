@@ -27,6 +27,18 @@ class GenreVO {
 
   Map<String, dynamic> toJson() => _$GenreVOToJson(this);
 
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is GenreVO &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          name == other.name;
+
+  @override
+  int get hashCode => id.hashCode ^ name.hashCode;
+
   bool sameId(List<int> ids) {
     for (var id in ids) {
       if(id == this.id) {

@@ -127,6 +127,9 @@ class GetMovieDetailsResponse {
   @JsonKey(name: "vote_count")
   int voteCount;
 
+  bool? isNowPlaying;
+  bool? isPopular;
+  bool? isTopRated;
 
   GetMovieDetailsResponse(
       this.adult,
@@ -167,6 +170,9 @@ class GetMovieDetailsResponse {
       video = this.video,
       voteAverage = this.voteAverage,
       voteCount = this.voteCount,
+      isTopRated = this.isTopRated,
+      isPopular = this.isPopular,
+      isNowPlaying = this.isNowPlaying
     );
   }
 }

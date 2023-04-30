@@ -25,7 +25,10 @@ GetMovieDetailsResponse _$GetMovieDetailsResponseFromJson(
       json['video'] as bool,
       (json['vote_average'] as num).toDouble(),
       json['vote_count'] as int,
-    );
+    )
+      ..isNowPlaying = json['isNowPlaying'] as bool?
+      ..isPopular = json['isPopular'] as bool?
+      ..isTopRated = json['isTopRated'] as bool?;
 
 Map<String, dynamic> _$GetMovieDetailsResponseToJson(
         GetMovieDetailsResponse instance) =>
@@ -44,4 +47,7 @@ Map<String, dynamic> _$GetMovieDetailsResponseToJson(
       'video': instance.video,
       'vote_average': instance.voteAverage,
       'vote_count': instance.voteCount,
+      'isNowPlaying': instance.isNowPlaying,
+      'isPopular': instance.isPopular,
+      'isTopRated': instance.isTopRated,
     };
