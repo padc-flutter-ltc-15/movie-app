@@ -24,7 +24,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => HomeBloc(),
+      create: (context) => HomeBloc(null),
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: HOME_SCREEN_BG_COLOR,

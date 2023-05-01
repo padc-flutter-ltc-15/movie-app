@@ -1,4 +1,6 @@
 
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:themovieapp/bloc/detail_bloc.dart';
@@ -25,7 +27,7 @@ class DetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => DetailBloc(id),
+      create: (context) => DetailBloc(id, null),
       child: Scaffold(
         body: Selector<DetailBloc, MovieVO?>(
           selector: (context, bloc) => bloc.movieDetail,

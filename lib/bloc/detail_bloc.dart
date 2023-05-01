@@ -20,7 +20,12 @@ class DetailBloc extends ChangeNotifier {
 
   MovieModel movieModel = MovieModelImpl();
 
-  DetailBloc(int id) {
+  DetailBloc(int id, MovieModel? mockedMovieModel) {
+    /// Set Mock Data For Test
+    if (mockedMovieModel != null) {
+      movieModel = mockedMovieModel;
+    }
+
     movieModel.getMovieDetails(id);
     movieModel.getMovieDetailsFromDatabase(id).then((value) {
       movieDetail = value;
