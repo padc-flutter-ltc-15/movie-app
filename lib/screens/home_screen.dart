@@ -56,9 +56,9 @@ class HomeScreen extends StatelessWidget {
                 Selector<HomeBloc, List<MovieVO>>(
                   selector: (context, bloc) => bloc.nowPlayingMovies,
                   builder: (context, value, child) {
-                    return BannerSection(
+                    if(value.length >= 5) return BannerSection(
                       movieList: value.take(5).toList(),
-                    );
+                    ); else return Container();
                   },
                 ), /// Banner
                 SizedBox(

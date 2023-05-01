@@ -13,7 +13,7 @@ void main() {
     });
 
     test("Fetch Movie Details Test", () {
-      expect(movieDetailsBloc?.movieDetail, getMockMoviesForTest().first);
+      expect(movieDetailsBloc?.movieDetail, getMockMoviesForTest().last);
     });
 
     test("Fetch Creators Test", () {

@@ -132,7 +132,11 @@ class MovieModelImpl extends MovieModel {
 
   @override
   Future<MovieVO> getMovieDetails(int id) {
-    return _movieDataAgent.getMovieDetails(id);
+    return _movieDataAgent.getMovieDetails(id).then((movie) {
+      movieDao.saveMovie(movie);
+
+      return Future.value(movie);
+    });
   }
 
   @override
